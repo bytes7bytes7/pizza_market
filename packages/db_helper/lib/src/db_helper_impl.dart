@@ -87,52 +87,40 @@ class DBHelperImpl implements DBHelper {
   @override
   Future<void> update(
     String table,
-    List<Map<String, Object?>> data,
-    List<Map<String, Object?>> where,
-  ) async {
+    List<Map<String, Object?>> data, {
+    List<Map<String, Object?>>? where,
+  }) async {
     final db = await database;
     await db.transaction((txn) async {
       for (var i = 0; i < data.length; i++) {
         final map = data[i];
-        final w = where[i];
-        final str = w.keys.map((e) => '$e = ?').join(', ');
+        final w = where?[i];
+        final str = w?.keys.map((e) => '$e = ?').join(', ');
 
-        await db.update(table, map, where: str, whereArgs: w.values.toList());
+        await db.update(table, map, where: str, whereArgs: w?.values.toList());
       }
     });
   }
 
   @override
   Future<List<Map<String, Object?>>> read(
-    String table,
-    List<Map<String, Object?>> where,
-  ) async {
+    String table, {
+    Map<String, Object?>? where,
+  }) async {
     final db = await database;
-    final res = await db.transaction((txn) async {
-      for (var i = 0; i < where.length; i++) {
-        final w = where[i];
-        final str = w.keys.map((e) => '$e = ?').join(', ');
+    final str = where?.keys.map((e) => '$e = ?').join(', ');
 
-        await db.query(table, where: str, whereArgs: w.values.toList());
-      }
-    });
-
-    return res;
+    return db.query(table, where: str, whereArgs: where?.values.toList());
   }
 
   @override
   Future<void> delete(
-    String table,
-    List<Map<String, Object?>> where,
-  ) async {
+    String table, {
+    Map<String, Object?>? where,
+  }) async {
     final db = await database;
-    await db.transaction((txn) async {
-      for (var i = 0; i < where.length; i++) {
-        final w = where[i];
-        final str = w.keys.map((e) => '$e = ?').join(', ');
+    final str = where?.keys.map((e) => '$e = ?').join(', ');
 
-        await db.delete(table, where: str, whereArgs: w.values.toList());
-      }
-    });
+    await db.delete(table, where: str, whereArgs: where?.values.toList());
   }
 }

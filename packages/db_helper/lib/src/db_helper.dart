@@ -1,6 +1,8 @@
 import 'models/models.dart';
 
 abstract class DBHelper {
+  const DBHelper();
+
   Future<void> createTable(
     String table,
     List<Field> fields, {
@@ -13,17 +15,17 @@ abstract class DBHelper {
 
   Future<void> update(
     String table,
-    List<Map<String, Object?>> data,
-    List<Map<String, Object?>> where,
-  );
+    List<Map<String, Object?>> data, {
+    List<Map<String, Object?>>? where,
+  });
 
   Future<List<Map<String, Object?>>> read(
-    String table,
-    List<Map<String, Object?>> where,
-  );
+    String table, {
+    Map<String, Object?>? where,
+  });
 
   Future<void> delete(
-    String table,
-    List<Map<String, Object?>> where,
-  );
+    String table, {
+    Map<String, Object?>? where,
+  });
 }
