@@ -9,7 +9,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Local
+  pizza_repo:
+    path: packages/pizza_repo
+
+  # Third party
+  bloc: ^8.0.3
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.3
+  flutter_bloc: ^8.0.1
 
 dev_dependencies:
   flutter_test:
