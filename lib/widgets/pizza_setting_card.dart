@@ -4,16 +4,20 @@ import 'package:pizza_repo/pizza_repo.dart';
 import '../constants/measures.dart' as const_measures;
 import '../l10n/l10n.dart';
 import 'amount_bar.dart';
+import 'common.dart';
+import 'widgets.dart';
 
-const pizzaSettingCardExtent = 235.0;
+const pizzaSettingCardExtent = 270.0;
 
 class PizzaSettingCard extends StatefulWidget {
   const PizzaSettingCard({
     super.key,
     required this.wrapper,
+    required this.onValidChanged,
   });
 
   final PizzaWrapper wrapper;
+  final void Function(bool isValid, [PizzaWrapper? wrapper]) onValidChanged;
 
   @override
   State<PizzaSettingCard> createState() => _PizzaSettingCardState();
@@ -24,14 +28,48 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
   late final TextEditingController _nameController;
   late final TextEditingController _priceController;
   final _formKey = GlobalKey<FormState>();
+  var _isValid = false;
+  late PizzaWrapper _newWrapper;
 
   @override
   void initState() {
     super.initState();
 
-    _amountNotifier = ValueNotifier(widget.wrapper.maxAmount);
-    _nameController = TextEditingController()..clear();
-    _priceController = TextEditingController()..clear();
+    _amountNotifier = ValueNotifier(widget.wrapper.maxAmount)
+      ..addListener(_onChanged);
+    _nameController = TextEditingController(text: widget.wrapper.title);
+    _nameController.addListener(_onChanged);
+    _priceController =
+        TextEditingController(text: beautifyCost(widget.wrapper.price));
+    _priceController.addListener(_onChanged);
+    _newWrapper = widget.wrapper.copyWith();
+  }
+
+  void _onChanged() {
+    if (_formKey.currentState?.validate() == true) {
+      _newWrapper = _newWrapper.copyWith(
+        title: _nameController.text,
+        price: double.parse(_priceController.text),
+        // TODO: add image url
+        imageUrl: '',
+        amount: widget.wrapper.amount,
+        maxAmount: _amountNotifier.value,
+      );
+
+      widget.onValidChanged(
+        true,
+        _newWrapper,
+      );
+
+      if (!_isValid) {
+        _isValid = true;
+      }
+    } else {
+      if (_isValid) {
+        _isValid = false;
+        widget.onValidChanged(false);
+      }
+    }
   }
 
   @override
@@ -91,6 +129,7 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
               child: Form(
                 key: _formKey,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -99,9 +138,22 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
                     ),
                     TextFormField(
                       controller: _nameController,
-                    ),
-                    const SizedBox(
-                      height: const_measures.bigPadding,
+                      // validator provides previous controller.text, so I need to pass current text manually
+                      validator: (_) =>
+                          _nameValidator(_nameController.text, l10n.invalid),
+                      decoration: InputDecoration(
+                        suffixIcon: SizedBox(
+                          height: const_measures.smallButtonSize,
+                          width: const_measures.smallButtonSize,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              color: theme.hintColor,
+                            ),
+                            onPressed: _nameController.clear,
+                          ),
+                        ),
+                      ),
                     ),
                     Text(
                       l10n.price,
@@ -109,6 +161,22 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
                     ),
                     TextFormField(
                       controller: _priceController,
+                      // validator provides previous controller.text, so I need to pass current text manually
+                      validator: (_) =>
+                          _priceValidator(_priceController.text, l10n.invalid),
+                      decoration: InputDecoration(
+                        suffixIcon: SizedBox(
+                          height: const_measures.smallButtonSize,
+                          width: const_measures.smallButtonSize,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              color: theme.hintColor,
+                            ),
+                            onPressed: _priceController.clear,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -123,5 +191,28 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
         ),
       ),
     );
+  }
+
+  String? _nameValidator(String? value, String error) {
+    if (value?.isNotEmpty == true) {
+      return null;
+    }
+
+    return error;
+  }
+
+  String? _priceValidator(String? value, String error) {
+    if (value?.isNotEmpty == true) {
+      if (value != null) {
+        try {
+          double.parse(value);
+          return null;
+        } catch (e) {
+          return error;
+        }
+      }
+    }
+
+    return error;
   }
 }

@@ -21,14 +21,17 @@ class BigButton extends StatelessWidget {
         const_measures.bigPadding,
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            theme.primaryColor,
-            theme.disabledColor,
-          ],
-          begin: Alignment.bottomRight,
-          end: Alignment.topLeft,
-        ),
+        color: onPressed != null ? null : theme.shadowColor,
+        gradient: onPressed != null
+            ? LinearGradient(
+                colors: [
+                  theme.primaryColor,
+                  theme.disabledColor,
+                ],
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
+              )
+            : null,
         borderRadius: BorderRadius.circular(
           const_measures.bigRadius,
         ),

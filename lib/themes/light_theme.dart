@@ -52,7 +52,7 @@ final lightTheme = ThemeData(
       vertical: const_measures.smallPadding,
       horizontal: const_measures.smallPadding,
     ),
-    errorStyle: const TextStyle(
+    errorStyle: _textTheme.subtitle1?.copyWith(
       color: const_colors.torchRed,
     ),
     border: const OutlineInputBorder(

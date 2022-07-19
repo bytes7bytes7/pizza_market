@@ -15,20 +15,24 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
   late final ScrollController _scrollController;
+  late final ValueNotifier<Map<int, bool>> _validNotifier;
   late final AdminBloc _adminBloc;
-  final _items = <PizzaWrapper>[];
+  final _newItems = <PizzaWrapper>[];
+  final _needUpdate = <PizzaWrapper>[];
 
   @override
   void initState() {
     super.initState();
 
     _scrollController = ScrollController();
+    _validNotifier = ValueNotifier(<int, bool>{});
     _adminBloc = context.read<AdminBloc>();
   }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _validNotifier.dispose();
 
     super.dispose();
   }
@@ -46,7 +50,7 @@ class _AdminScreenState extends State<AdminScreen> {
           icon: Icons.add,
           onPressed: () {
             setState(() {
-              _items.add(
+              _newItems.add(
                 const PizzaWrapper(
                   title: '',
                   price: 0,
@@ -80,7 +84,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 if (state is AdminDataState) {
                   final wrappers = state.wrappers;
 
-                  if (wrappers.isEmpty && _items.isEmpty) {
+                  if (wrappers.isEmpty && _newItems.isEmpty) {
                     return Center(
                       child: Text(
                         l10n.empty,
@@ -92,17 +96,21 @@ class _AdminScreenState extends State<AdminScreen> {
                   return ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     controller: _scrollController,
-                    itemCount: wrappers.length + _items.length,
+                    itemCount: wrappers.length + _newItems.length,
                     itemExtent: pizzaSettingCardExtent,
                     itemBuilder: (context, index) {
                       if (index < wrappers.length) {
                         return PizzaSettingCard(
+                          onValidChanged: (value, [wrapper]) =>
+                              _onValidChanged(index, value, wrapper),
                           wrapper: wrappers[index],
                         );
                       }
 
                       return PizzaSettingCard(
-                        wrapper: _items[index - wrappers.length],
+                        onValidChanged: (value, [wrapper]) =>
+                            _onValidChanged(index, value, wrapper),
+                        wrapper: _newItems[index - wrappers.length],
                       );
                     },
                   );
@@ -123,7 +131,8 @@ class _AdminScreenState extends State<AdminScreen> {
           ),
           FractionallySizedBox(
             widthFactor: 1,
-            child: BigButton(
+            child: ValueListenableBuilder<Map<int, bool>>(
+              valueListenable: _validNotifier,
               child: Text(
                 l10n.save,
                 style: theme.textTheme.button?.copyWith(
@@ -131,11 +140,45 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
                 textAlign: TextAlign.center,
               ),
-              onPressed: () {},
+              builder: (context, value, child) {
+                final allValid =
+                    value.entries.every((p) => p.value) && value.isNotEmpty;
+
+                return BigButton(
+                  onPressed: allValid
+                      ? () {
+                          _adminBloc.add(
+                            AdminSaveEvent(
+                              wrappers: List.from(_needUpdate),
+                            ),
+                          );
+                          _needUpdate.clear();
+                          _newItems.clear();
+                        }
+                      : null,
+                  child: child ?? const SizedBox.shrink(),
+                );
+              },
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _onValidChanged(int index, bool isValid, PizzaWrapper? wrapper) {
+    if (wrapper != null) {
+      final oldIndex = _needUpdate.indexWhere((e) => e.id == wrapper.id);
+
+      if (oldIndex != -1) {
+        _needUpdate[oldIndex] = wrapper;
+      } else {
+        _needUpdate.add(wrapper);
+      }
+    }
+
+    final map = Map<int, bool>.from(_validNotifier.value);
+    map[index] = isValid;
+    _validNotifier.value = map;
   }
 }

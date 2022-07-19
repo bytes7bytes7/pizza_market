@@ -85,7 +85,7 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
       if (index != -1) {
         newWrappers.add(
           w.copyWith(
-            amount: min(oldWrappers[index].amount, w.maxAmount),
+            amount: min(w.amount, w.maxAmount),
           ),
         );
       } else {
@@ -105,10 +105,14 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
 
     final prevState = _lastDataState;
 
-    final order = prevState.wrappers.where((e) => e.amount > 0);
+    final newWrappers = List<PizzaWrapper>.from(prevState.wrappers);
+    for (final w in event.wrappers) {
+      final index = prevState.wrappers.indexWhere((e) => e.id == w.id);
 
-    final newWrappers = <PizzaWrapper>[];
-    for (var w in prevState.wrappers) {
+      if (index != -1) {
+        newWrappers.removeAt(index);
+      }
+
       if (w.amount > 0) {
         newWrappers.add(w.copyWith(amount: 0));
       } else {
@@ -119,10 +123,10 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
     final newState = _lastDataState = PizzaDataState(newWrappers, 0);
     emit(newState);
 
-    unawaited(_pizzaRepo.order(order.toList()));
+    unawaited(_pizzaRepo.order(newWrappers.toList()));
   }
 
-  Future<void> _initRepo()async {
+  Future<void> _initRepo() async {
     if (!_repoInitialized) {
       await _pizzaRepo.init();
       _repoInitialized = true;
@@ -131,6 +135,7 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
 
   double _cartCost(List<PizzaWrapper> wrappers) => wrappers.fold<double>(
         0.0,
-        (prev, curr) => prev + ((curr.amount > 0) ? curr.price : 0),
+        (prev, curr) =>
+            prev + ((curr.amount > 0) ? curr.price * curr.amount : 0),
       );
 }

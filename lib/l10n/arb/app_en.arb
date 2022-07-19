@@ -11,6 +11,7 @@
     "appName": "Pizza Market",
     "empty": "Empty",
     "error": "Error",
+    "invalid": "Invalid",
     "name":"Name",
     "orderDetails": "Order details",
     "placeOrder": "Place my order",

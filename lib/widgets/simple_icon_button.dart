@@ -7,6 +7,7 @@ class SimpleIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onPressed,
+    this.alignment = Alignment.center,
     this.buttonSize = const_measures.bigButtonSize,
     this.iconSize = const_measures.bigIconSize,
     this.color,
@@ -14,6 +15,7 @@ class SimpleIconButton extends StatelessWidget {
 
   final IconData icon;
   final VoidCallback onPressed;
+  final Alignment alignment;
   final double buttonSize;
   final double iconSize;
   final Color? color;
@@ -23,7 +25,7 @@ class SimpleIconButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Align(
-      alignment: Alignment.center,
+      alignment: alignment,
       child: SizedBox(
         height: buttonSize,
         width: buttonSize,

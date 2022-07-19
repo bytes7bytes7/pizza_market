@@ -13,7 +13,7 @@ class PizzaControlCard extends StatefulWidget {
   });
 
   final PizzaWrapper wrapper;
-  final void Function(double delta) onChanged;
+  final void Function(int amount) onChanged;
 
   @override
   State<PizzaControlCard> createState() => _PizzaControlCardState();
@@ -21,7 +21,6 @@ class PizzaControlCard extends StatefulWidget {
 
 class _PizzaControlCardState extends State<PizzaControlCard> {
   late final ValueNotifier<int> _amountNotifier;
-  var _prevState = 0;
 
   @override
   void initState() {
@@ -29,10 +28,7 @@ class _PizzaControlCardState extends State<PizzaControlCard> {
 
     _amountNotifier = ValueNotifier(widget.wrapper.amount)
       ..addListener(() {
-        final value = _amountNotifier.value;
-        final sign = value - _prevState;
-        widget.onChanged(widget.wrapper.price * sign);
-        _prevState = value;
+        widget.onChanged(_amountNotifier.value);
       });
   }
 

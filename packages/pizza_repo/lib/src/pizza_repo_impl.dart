@@ -57,10 +57,11 @@ class PizzaRepoImpl implements PizzaRepo {
 
   @override
   Future<void> order(List<PizzaWrapper> wrappers) async {
-    final newWrappers = wrappers.map((e) => e.copyWith(amount: 0));
+    final where = wrappers.map((e) => {pizza_const.id: e.id}).toList();
     return _db.update(
       pizza_const.wrapperTable,
-      newWrappers.map((e) => e.toJson()).toList(),
+      wrappers.map((e) => e.toJson()).toList(),
+      where: where,
     );
   }
 }

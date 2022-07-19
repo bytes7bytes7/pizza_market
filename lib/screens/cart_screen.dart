@@ -16,6 +16,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   late final PizzaBloc _pizzaBloc;
   late final ValueNotifier<double> _costNotifier;
+  late final ValueNotifier<List<PizzaWrapper>> _pizzasNotifier;
 
   @override
   void initState() {
@@ -23,11 +24,13 @@ class _CartScreenState extends State<CartScreen> {
 
     _pizzaBloc = context.read<PizzaBloc>();
     _costNotifier = ValueNotifier(0);
+    _pizzasNotifier = ValueNotifier([]);
   }
 
   @override
   void dispose() {
     _costNotifier.dispose();
+    _pizzasNotifier.dispose();
 
     super.dispose();
   }
@@ -36,90 +39,94 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = context.l10n;
-    var hasData = false;
 
     return Scaffold(
       appBar: DefaultAppBar(
         title: l10n.orderDetails,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: BlocBuilder<PizzaBloc, PizzaState>(
-              buildWhen: (prev, curr) {
-                return !hasData;
-              },
-              builder: (context, state) {
-                if (state is PizzaInitState) {
-                  _pizzaBloc.add(const PizzaLoadEvent());
-                }
+      body: BlocBuilder<PizzaBloc, PizzaState>(
+        builder: (context, state) {
+          if (state is PizzaInitState) {
+            _pizzaBloc.add(const PizzaLoadEvent());
+          }
 
-                if (state is PizzaDataState) {
-                  hasData = true;
+          if (state is PizzaDataState) {
+            _costNotifier.value = state.cartCost;
+            final inCart = state.wrappers.where((e) => e.amount > 0).toList();
 
-                  final inCart =
-                      state.wrappers.where((e) => e.amount > 0).toList();
+            _pizzasNotifier.value = inCart;
 
-                  _costNotifier.value = _calcCost(inCart);
+            if (inCart.isEmpty) {
+              return Center(
+                child: Text(
+                  l10n.empty,
+                  style: theme.textTheme.headline6,
+                ),
+              );
+            }
 
-                  if (inCart.isEmpty) {
-                    return Center(
-                      child: Text(
-                        l10n.empty,
-                        style: theme.textTheme.headline6,
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     itemCount: inCart.length,
                     itemBuilder: (context, index) {
+                      final wrapper = inCart[index];
+
                       return PizzaControlCard(
-                        wrapper: inCart[index],
-                        onChanged: (delta) {
-                          _costNotifier.value += delta;
+                        wrapper: wrapper,
+                        onChanged: (amount) {
+                          var cartCost = state.cartCost;
+                          cartCost += wrapper.price * (amount - 1);
+                          _costNotifier.value = cartCost;
+                          final newWrappers =
+                              List<PizzaWrapper>.from(_pizzasNotifier.value);
+                          newWrappers[index] = wrapper.copyWith(amount: amount);
+                          _pizzasNotifier.value = newWrappers;
+                          _pizzaBloc.add(
+                            PizzaUpdateEvent(
+                              wrappers: newWrappers,
+                            ),
+                          );
                         },
                       );
                     },
-                  );
-                } else if (state is PizzaErrorState) {
-                  return ErrorLabel(
-                    error: state.error,
-                    stackTrace: state.stackTrace,
-                    buttonText: l10n.tryAgain,
-                    onPressed: () {
-                      _pizzaBloc.add(const PizzaLoadEvent());
-                    },
-                  );
-                }
+                  ),
+                ),
+                ValueListenableBuilder<List<PizzaWrapper>>(
+                  valueListenable: _pizzasNotifier,
+                  builder: (context, pizzas, child) {
+                    if (pizzas.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
 
-                return const LoadingWidget();
+                    return OrderCard(
+                      costNotifier: _costNotifier,
+                      onPressed: () {
+                        _pizzaBloc.add(
+                          PizzaOrderEvent(wrappers: pizzas),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+            );
+          } else if (state is PizzaErrorState) {
+            return ErrorLabel(
+              error: state.error,
+              stackTrace: state.stackTrace,
+              buttonText: l10n.tryAgain,
+              onPressed: () {
+                _pizzaBloc.add(const PizzaLoadEvent());
               },
-            ),
-          ),
-          ValueListenableBuilder<double>(
-            valueListenable: _costNotifier,
-            builder: (context, value, child) {
-              if (value == 0) {
-                return const SizedBox.shrink();
-              }
+            );
+          }
 
-              return OrderCard(
-                costNotifier: _costNotifier,
-                onPressed: () {},
-              );
-            },
-          ),
-        ],
+          return const LoadingWidget();
+        },
       ),
-    );
-  }
-
-  double _calcCost(List<PizzaWrapper> wrappers) {
-    return wrappers.fold<double>(
-      0,
-      (prev, curr) => prev + curr.price * curr.amount,
     );
   }
 }
