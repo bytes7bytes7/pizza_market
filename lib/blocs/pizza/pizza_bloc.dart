@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:pizza_repo/pizza_repo.dart';
 
 import '../admin/admin_bloc.dart';
+import '../blocs.dart';
 
 part 'pizza_event.dart';
 
@@ -16,11 +17,12 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
     on<PizzaLoadEvent>(_load);
     on<PizzaPickEvent>(_pick);
     on<PizzaUpdateEvent>(_update);
+    on<PizzaChangeEvent>(_change);
     on<PizzaOrderEvent>(_order);
 
     _adminSub = _adminBloc.stream.listen((adminState) {
       if (adminState is AdminDataState) {
-        add(PizzaUpdateEvent(wrappers: adminState.wrappers));
+        add(PizzaChangeEvent(wrappers: adminState.wrappers));
       }
     });
   }
@@ -45,16 +47,17 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
       emit(const PizzaLoadingState());
     }
 
-    final data = await _pizzaRepo.load();
-
-    final newState = _lastDataState = PizzaDataState(data, _cartCost(data));
-    emit(newState);
+    if (_adminBloc.state is AdminInitState) {
+      _adminBloc.add(const AdminLoadEvent());
+    }
   }
 
   Future<void> _pick(PizzaPickEvent event, Emitter<PizzaState> emit) async {
     await _initRepo();
 
     final wrapper = event.wrapper.copyWith(amount: 1);
+    _adminBloc.add(AdminUpdateEvent(wrappers: [wrapper]));
+
     final prevState = _lastDataState;
 
     final newWrappers = List<PizzaWrapper>.from(prevState.wrappers);
@@ -96,8 +99,15 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
     final newState =
         _lastDataState = PizzaDataState(newWrappers, _cartCost(newWrappers));
     emit(newState);
+    _adminBloc.add(AdminUpdateEvent(wrappers: newWrappers));
 
     unawaited(_pizzaRepo.update(newWrappers));
+  }
+
+  Future<void> _change(PizzaChangeEvent event, Emitter<PizzaState> emit) async {
+    await _initRepo();
+
+    emit(PizzaDataState(event.wrappers, _cartCost(event.wrappers)));
   }
 
   Future<void> _order(PizzaOrderEvent event, Emitter<PizzaState> emit) async {
@@ -122,6 +132,7 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
 
     final newState = _lastDataState = PizzaDataState(newWrappers, 0);
     emit(newState);
+    _adminBloc.add(AdminUpdateEvent(wrappers: newWrappers));
 
     unawaited(_pizzaRepo.order(newWrappers.toList()));
   }

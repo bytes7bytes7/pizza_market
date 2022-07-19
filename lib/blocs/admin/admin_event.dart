@@ -19,3 +19,12 @@ class AdminSaveEvent extends AdminEvent {
   @override
   List<Object?> get props => [wrappers];
 }
+
+class AdminUpdateEvent extends AdminEvent {
+  const AdminUpdateEvent({required this.wrappers});
+
+  final List<PizzaWrapper> wrappers;
+
+  @override
+  List<Object?> get props => [wrappers];
+}

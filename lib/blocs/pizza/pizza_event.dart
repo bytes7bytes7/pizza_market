@@ -20,8 +20,19 @@ class PizzaPickEvent extends PizzaEvent {
   List<Object> get props => [wrapper];
 }
 
+// amount update
 class PizzaUpdateEvent extends PizzaEvent {
   const PizzaUpdateEvent({required this.wrappers});
+
+  final List<PizzaWrapper> wrappers;
+
+  @override
+  List<Object> get props => [wrappers];
+}
+
+// admin changes
+class PizzaChangeEvent extends PizzaEvent {
+  const PizzaChangeEvent({required this.wrappers});
 
   final List<PizzaWrapper> wrappers;
 

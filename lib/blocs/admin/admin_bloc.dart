@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -12,9 +13,11 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
   AdminBloc(this._pizzaRepo) : super(const AdminInitState()) {
     on<AdminLoadEvent>(_load);
     on<AdminSaveEvent>(_save);
+    on<AdminUpdateEvent>(_update);
   }
 
   final PizzaRepo _pizzaRepo;
+  AdminDataState _lastDataState = const AdminDataState([]);
   bool _repoInitialized = false;
 
   Future<void> _load(AdminLoadEvent event, Emitter<AdminState> emit) async {
@@ -26,7 +29,8 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
 
     try {
       final data = await _pizzaRepo.load();
-      emit(AdminDataState(data));
+      final newState = _lastDataState = AdminDataState(data);
+      emit(newState);
     } catch (e, s) {
       emit(AdminErrorState(e, s));
     }
@@ -39,12 +43,40 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
       emit(const AdminLoadingState());
     }
 
-    await _pizzaRepo.update(event.wrappers);
+    final newWrappers = List<PizzaWrapper>.from(event.wrappers);
+    for (var i = 0; i < newWrappers.length; i++) {
+      final wrapper = newWrappers[i];
+      if (wrapper.amount > wrapper.maxAmount) {
+        newWrappers[i] = wrapper.copyWith(amount: wrapper.maxAmount);
+      }
+    }
+
+    await _pizzaRepo.update(newWrappers);
 
     add(const AdminLoadEvent());
   }
 
-  Future<void> _initRepo()async {
+  Future<void> _update(AdminUpdateEvent event, Emitter<AdminState> emit) async {
+    final prevState = _lastDataState;
+
+    final newWrappers = List<PizzaWrapper>.from(prevState.wrappers);
+    for (final w in event.wrappers) {
+      final index = newWrappers.indexWhere((e) => e.id == w.id);
+
+      if (index != -1) {
+        final oldWrapper = newWrappers[index];
+        newWrappers[index] = oldWrapper.copyWith(
+          amount: min(w.amount, oldWrapper.maxAmount),
+        );
+      }
+    }
+
+    final newState = _lastDataState = AdminDataState(newWrappers);
+
+    emit(newState);
+  }
+
+  Future<void> _initRepo() async {
     if (!_repoInitialized) {
       await _pizzaRepo.init();
       _repoInitialized = true;
