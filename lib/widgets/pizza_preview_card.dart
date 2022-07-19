@@ -71,10 +71,16 @@ class PizzaPreviewCard extends StatelessWidget {
                         wrapper.imageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, trace) {
-                          return const Icon(Icons.photo);
+                          return Icon(
+                            Icons.photo,
+                            color: theme.primaryColor,
+                          );
                         },
                       )
-                    : const Icon(Icons.local_pizza_outlined),
+                    : Icon(
+                        Icons.local_pizza_outlined,
+                        color: theme.primaryColor,
+                      ),
               ),
               Expanded(
                 child: Padding(

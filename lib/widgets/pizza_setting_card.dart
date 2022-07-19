@@ -124,10 +124,16 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
                         _imageUrlController.text,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, trace) {
-                          return const Icon(Icons.photo);
+                          return Icon(
+                            Icons.photo,
+                            color: theme.primaryColor,
+                          );
                         },
                       )
-                    : const Icon(Icons.local_pizza_outlined),
+                    : Icon(
+                        Icons.local_pizza_outlined,
+                        color: theme.primaryColor,
+                      ),
                 onPressed: () => showUrlDialog(
                   context: context,
                   controller: _imageUrlController,
