@@ -4,8 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pizza_repo/pizza_repo.dart';
 
-import 'blocs/admin/admin_bloc.dart';
-import 'blocs/pizza/pizza_bloc.dart';
+import 'blocs/blocs.dart';
 import 'constants/app.dart' as const_app;
 import 'constants/routes.dart' as const_routes;
 import 'l10n/l10n.dart';
@@ -17,43 +16,44 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final db = DBHelperImpl();
-    final adminBloc = AdminBloc(
-      PizzaRepoImpl(db),
-    );
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => adminBloc,
-        ),
-        BlocProvider(
-          create: (context) => PizzaBloc(
-            adminBloc,
-            PizzaRepoImpl(db),
+    return RepositoryProvider(
+      create: (context) => PizzaRepoImpl(DBHelperImpl()),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AdminBloc(
+              context.read<PizzaRepoImpl>(),
+            ),
           ),
-        ),
-      ],
-      child: MaterialApp(
-        title: const_app.appName,
-        theme: lightTheme,
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('ru', ''),
-          Locale('en', ''),
-        ],
-        navigatorKey: ScreenRouter.inst.navigatorKey,
-        onGenerateInitialRoutes: (_) => [
-          ScreenRouter.inst.navigate(
-            const RouteSettings(name: const_routes.home),
+          BlocProvider(
+            create: (context) => PizzaBloc(
+              context.read<AdminBloc>(),
+              context.read<PizzaRepoImpl>(),
+            ),
           ),
         ],
-        onGenerateRoute: ScreenRouter.inst.navigate,
+        child: MaterialApp(
+          title: const_app.appName,
+          theme: lightTheme,
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('ru', ''),
+            Locale('en', ''),
+          ],
+          navigatorKey: ScreenRouter.inst.navigatorKey,
+          onGenerateInitialRoutes: (_) => [
+            ScreenRouter.inst.navigate(
+              const RouteSettings(name: const_routes.home),
+            ),
+          ],
+          onGenerateRoute: ScreenRouter.inst.navigate,
+        ),
       ),
     );
   }

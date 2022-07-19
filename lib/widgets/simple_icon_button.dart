@@ -31,7 +31,7 @@ class SimpleIconButton extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(
-              const_measures.smallButtonRadius,
+              const_measures.smallRadius,
             ),
             splashColor: theme.scaffoldBackgroundColor.withOpacity(
               const_measures.smallOpacity,

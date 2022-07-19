@@ -33,16 +33,10 @@ class DBHelperImpl implements DBHelper {
   }
 
   @override
-  Future<void> createTable(
-    String table,
-    List<Field> fields, {
-    bool force = false,
-  }) async {
+  Future<void> createTable(String table, List<Field> fields) async {
     final db = await database;
-    var sql =
-        StringBuffer('CREATE TABLE ${force ? "" : "IF NOT EXISTS"} $table (');
+    var sql = StringBuffer('CREATE TABLE IF NOT EXISTS $table (');
     for (var e in fields) {
-      final nullable = e.nullable ? '' : 'NOT NULL';
       var type = '';
       switch (e.type) {
         case int:
@@ -60,6 +54,8 @@ class DBHelperImpl implements DBHelper {
         type += ' PRIMARY KEY';
       }
 
+      final nullable = e.nullable ? '' : 'NOT NULL';
+
       sql.write('${e.title} $type $nullable,');
     }
 
@@ -75,13 +71,19 @@ class DBHelperImpl implements DBHelper {
   }
 
   @override
+  Future<void> recreateTable(String table, List<Field> fields) async {
+    final db = await database;
+    await db.execute('DROP TABLE IF EXISTS $table;');
+    await createTable(table, fields);
+  }
+
+  @override
   Future<void> add(String table, List<Map<String, Object?>> data) async {
     final db = await database;
-    await db.transaction((txn) async {
-      for (final e in data) {
-        await db.insert(table, e);
-      }
-    });
+
+    for (final e in data) {
+      await db.insert(table, e);
+    }
   }
 
   @override
@@ -91,15 +93,14 @@ class DBHelperImpl implements DBHelper {
     List<Map<String, Object?>>? where,
   }) async {
     final db = await database;
-    await db.transaction((txn) async {
-      for (var i = 0; i < data.length; i++) {
-        final map = data[i];
-        final w = where?[i];
-        final str = w?.keys.map((e) => '$e = ?').join(', ');
 
-        await db.update(table, map, where: str, whereArgs: w?.values.toList());
-      }
-    });
+    for (var i = 0; i < data.length; i++) {
+      final map = data[i];
+      final w = where?[i];
+      final str = w?.keys.map((e) => '$e = ?').join(', ');
+
+      await db.update(table, map, where: str, whereArgs: w?.values.toList());
+    }
   }
 
   @override

@@ -12,7 +12,17 @@ class PizzaRepoImpl implements PizzaRepo {
 
   @override
   Future<void> init() async {
-    await _db.createTable(pizza_const.wrapperTable, pizza_const.wrapperFields);
+    try {
+      await _db.createTable(
+        pizza_const.wrapperTable,
+        pizza_const.wrapperFields,
+      );
+    } catch (e) {
+      await _db.recreateTable(
+        pizza_const.wrapperTable,
+        pizza_const.wrapperFields,
+      );
+    }
   }
 
   @override

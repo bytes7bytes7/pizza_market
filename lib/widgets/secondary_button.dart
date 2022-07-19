@@ -28,7 +28,7 @@ class SecondaryButton extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
-              const_measures.smallButtonRadius,
+              const_measures.smallRadius,
             ),
             color: theme.disabledColor.withOpacity(
               const_measures.smallOpacity,
@@ -38,7 +38,7 @@ class SecondaryButton extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               borderRadius: BorderRadius.circular(
-                const_measures.smallButtonRadius,
+                const_measures.smallRadius,
               ),
               splashColor: theme.scaffoldBackgroundColor.withOpacity(
                 const_measures.midOpacity,

@@ -28,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
-              const_measures.smallButtonRadius,
+              const_measures.smallRadius,
             ),
             gradient: LinearGradient(
               colors: [
@@ -43,7 +43,7 @@ class PrimaryButton extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               borderRadius: BorderRadius.circular(
-                const_measures.smallButtonRadius,
+                const_measures.smallRadius,
               ),
               splashColor: theme.scaffoldBackgroundColor.withOpacity(
                 const_measures.midOpacity,

@@ -35,9 +35,13 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
   Future<void> _save(AdminSaveEvent event, Emitter<AdminState> emit) async {
     await _initRepo();
 
-    emit(AdminDataState(event.wrappers));
+    if (state is! AdminLoadingState) {
+      emit(const AdminLoadingState());
+    }
 
     await _pizzaRepo.update(event.wrappers);
+
+    add(const AdminLoadEvent());
   }
 
   Future<void> _initRepo()async {

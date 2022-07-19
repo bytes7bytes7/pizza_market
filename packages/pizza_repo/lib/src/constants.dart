@@ -12,7 +12,7 @@ const maxAmount = 'maxAmount';
 const wrapperFields = [
   Field(
     title: id,
-    type: String,
+    type: int,
     nullable: false,
     primary: true,
   ),

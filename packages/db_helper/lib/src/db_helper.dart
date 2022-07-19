@@ -3,13 +3,11 @@ import 'models/models.dart';
 abstract class DBHelper {
   const DBHelper();
 
-  Future<void> createTable(
-    String table,
-    List<Field> fields, {
-    bool force = false,
-  });
+  Future<void> createTable(String table, List<Field> fields);
 
   Future<void> clearTable(String table);
+
+  Future<void> recreateTable(String table, List<Field> fields);
 
   Future<void> add(String table, List<Map<String, Object?>> data);
 
