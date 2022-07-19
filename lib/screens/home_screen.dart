@@ -91,20 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
             return ListView.builder(
               itemCount: wrappers.length,
               itemBuilder: (context, index) {
-                final wrapper = wrappers[index];
-
-                return ListTile(
-                  title: Text(wrapper.title),
-                  leading: wrapper.imageUrl.isNotEmpty
-                      ? Image.network(
-                          wrapper.imageUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, trace) {
-                            return const Icon(Icons.photo);
-                          },
-                        )
-                      : const Icon(Icons.local_pizza_outlined),
-                  trailing: Text('\$${wrapper.price}'),
+                return PizzaPreviewCard(
+                  wrapper: wrappers[index],
+                  onPressed: () {},
                 );
               },
             );

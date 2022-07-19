@@ -89,6 +89,11 @@ final lightTheme = ThemeData(
           return const_colors.torchRed;
         },
       ),
+      overlayColor: MaterialStateProperty.all(
+        const_colors.tickleMePink.withOpacity(
+          const_measures.smallOpacity,
+        ),
+      ),
       shadowColor: MaterialStateProperty.all(Colors.transparent),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(

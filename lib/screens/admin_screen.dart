@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pizza_repo/pizza_repo.dart';
 
-import '../constants/measures.dart' as const_measures;
 import '../blocs/blocs.dart';
 import '../l10n/l10n.dart';
 import '../widgets/widgets.dart';
