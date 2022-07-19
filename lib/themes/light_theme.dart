@@ -15,6 +15,7 @@ final lightTheme = ThemeData(
   progressIndicatorTheme: const ProgressIndicatorThemeData(
     color: const_colors.torchRed,
   ),
+  dividerColor: const_colors.white,
   cardTheme: CardTheme(
     shadowColor: const_colors.ghost,
     color: const_colors.white,

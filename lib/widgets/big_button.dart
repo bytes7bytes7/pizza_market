@@ -17,9 +17,8 @@ class BigButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: const_measures.bigPadding,
-        vertical: const_measures.midPadding,
+      margin: const EdgeInsets.all(
+        const_measures.bigPadding,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(

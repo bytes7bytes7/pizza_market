@@ -10,6 +10,7 @@ const bigButtonSize = 48.0;
 const smallRadius = 10.0;
 const midRadius = 16.0;
 const bigRadius = 24.0;
+const largeRadius = 32.0;
 const smallOpacity = 0.1;
 const midOpacity = 0.7;
 const smallPadding = 10.0;

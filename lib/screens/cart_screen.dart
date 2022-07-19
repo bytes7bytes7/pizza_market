@@ -31,45 +31,59 @@ class _CartScreenState extends State<CartScreen> {
       appBar: DefaultAppBar(
         title: l10n.orderDetails,
       ),
-      body: BlocBuilder<PizzaBloc, PizzaState>(
-        builder: (context, state) {
-          if (state is PizzaInitState) {
-            _pizzaBloc.add(const PizzaLoadEvent());
-          }
-
-          if (state is PizzaDataState) {
-            final inCart = state.wrappers.where((e) => e.amount > 0).toList();
-
-            if (inCart.isEmpty) {
-              return Center(
-                child: Text(
-                  l10n.empty,
-                  style: theme.textTheme.headline6,
-                ),
-              );
-            }
-
-            return ListView.builder(
-              itemCount: inCart.length,
-              itemBuilder: (context, index) {
-                return PizzaControlCard(
-                  wrapper: inCart[index],
-                );
-              },
-            );
-          } else if (state is PizzaErrorState) {
-            return ErrorLabel(
-              error: state.error,
-              stackTrace: state.stackTrace,
-              buttonText: l10n.tryAgain,
-              onPressed: () {
+      body: Stack(
+        children: [
+          BlocBuilder<PizzaBloc, PizzaState>(
+            builder: (context, state) {
+              if (state is PizzaInitState) {
                 _pizzaBloc.add(const PizzaLoadEvent());
-              },
-            );
-          }
+              }
 
-          return const LoadingWidget();
-        },
+              if (state is PizzaDataState) {
+                final inCart =
+                    state.wrappers.where((e) => e.amount > 0).toList();
+
+                if (inCart.isEmpty) {
+                  return Center(
+                    child: Text(
+                      l10n.empty,
+                      style: theme.textTheme.headline6,
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  itemCount: inCart.length,
+                  itemBuilder: (context, index) {
+                    return PizzaControlCard(
+                      wrapper: inCart[index],
+                    );
+                  },
+                );
+              } else if (state is PizzaErrorState) {
+                return ErrorLabel(
+                  error: state.error,
+                  stackTrace: state.stackTrace,
+                  buttonText: l10n.tryAgain,
+                  onPressed: () {
+                    _pizzaBloc.add(const PizzaLoadEvent());
+                  },
+                );
+              }
+
+              return const LoadingWidget();
+            },
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: OrderCard(
+              cost: 10,
+              onPressed: () {},
+            ),
+          ),
+        ],
       ),
     );
   }
