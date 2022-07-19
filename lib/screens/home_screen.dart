@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/pizza/pizza_bloc.dart';
+import '../constants/measures.dart' as const_measures;
 import '../constants/routes.dart' as const_routes;
 import '../l10n/l10n.dart';
+import '../widgets/simple_icon_button.dart';
 import '../widgets/widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,42 +31,84 @@ class _HomeScreenState extends State<HomeScreen> {
     final l10n = context.l10n;
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(l10n.appName),
-        actions: [
-          ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(
-              colors: [
-                theme.primaryColor,
-                theme.disabledColor,
-              ],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
-            ).createShader(bounds),
-            child: IconButton(
-              icon: const Icon(Icons.shopping_basket),
-              onPressed: () {},
+      appBar: DefaultAppBar(
+        title: l10n.appName,
+        leading: null,
+        action: Row(
+          children: [
+            ShaderMask(
+              shaderCallback: (bounds) => LinearGradient(
+                colors: [
+                  theme.primaryColor,
+                  theme.disabledColor,
+                ],
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
+              ).createShader(bounds),
+              child: SimpleIconButton(
+                icon: Icons.shopping_basket,
+                onPressed: () {
+                  Navigator.of(context).pushNamed(const_routes.cart);
+                },
+              ),
             ),
-          ),
-          ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(
-              colors: [
-                theme.primaryColor,
-                theme.disabledColor,
-              ],
-              begin: Alignment.bottomRight,
-              end: Alignment.topLeft,
-            ).createShader(bounds),
-            child: IconButton(
-              icon: const Icon(Icons.person),
-              onPressed: () {
-                Navigator.of(context).pushNamed(const_routes.admin);
-              },
+            ShaderMask(
+              shaderCallback: (bounds) => LinearGradient(
+                colors: [
+                  theme.primaryColor,
+                  theme.disabledColor,
+                ],
+                begin: Alignment.bottomRight,
+                end: Alignment.topLeft,
+              ).createShader(bounds),
+              child: SimpleIconButton(
+                icon: Icons.person,
+                onPressed: () {
+                  Navigator.of(context).pushNamed(const_routes.admin);
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+      // appBar: AppBar(
+      //   centerTitle: false,
+      //   title: Text(l10n.appName),
+      //   actions: [
+      //     ShaderMask(
+      //       shaderCallback: (bounds) => LinearGradient(
+      //         colors: [
+      //           theme.primaryColor,
+      //           theme.disabledColor,
+      //         ],
+      //         begin: Alignment.bottomRight,
+      //         end: Alignment.topLeft,
+      //       ).createShader(bounds),
+      //       child: SimpleIconButton(
+      //         icon: Icons.shopping_basket,
+      //         onPressed: () {
+      //           Navigator.of(context).pushNamed(const_routes.cart);
+      //         },
+      //       ),
+      //     ),
+      //     ShaderMask(
+      //       shaderCallback: (bounds) => LinearGradient(
+      //         colors: [
+      //           theme.primaryColor,
+      //           theme.disabledColor,
+      //         ],
+      //         begin: Alignment.bottomRight,
+      //         end: Alignment.topLeft,
+      //       ).createShader(bounds),
+      //       child: SimpleIconButton(
+      //         icon: Icons.person,
+      //         onPressed: () {
+      //           Navigator.of(context).pushNamed(const_routes.admin);
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: BlocBuilder<PizzaBloc, PizzaState>(
         builder: (context, state) {
           if (state is PizzaInitState) {

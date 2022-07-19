@@ -39,14 +39,22 @@ class PrimaryButton extends StatelessWidget {
               end: Alignment.topLeft,
             ),
           ),
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            icon: Icon(
-              icon,
-              size: iconSize,
-              color: theme.scaffoldBackgroundColor,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(
+                const_measures.smallButtonRadius,
+              ),
+              splashColor: theme.scaffoldBackgroundColor.withOpacity(
+                const_measures.midOpacity,
+              ),
+              onTap: onPressed,
+              child: Icon(
+                icon,
+                size: iconSize,
+                color: theme.scaffoldBackgroundColor,
+              ),
             ),
-            onPressed: onPressed,
           ),
         ),
       ),

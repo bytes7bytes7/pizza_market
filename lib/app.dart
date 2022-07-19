@@ -10,7 +10,6 @@ import 'constants/app.dart' as const_app;
 import 'constants/routes.dart' as const_routes;
 import 'l10n/l10n.dart';
 import 'screen_router.dart';
-import 'screens/screens.dart';
 import 'themes/themes.dart';
 
 class App extends StatelessWidget {
