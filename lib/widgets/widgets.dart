@@ -1,4 +1,5 @@
 export 'amount_bar.dart';
+export 'big_button.dart';
 export 'default_app_bar.dart';
 export 'error_label.dart';
 export 'loading_widget.dart';

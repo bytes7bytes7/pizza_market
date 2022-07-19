@@ -34,22 +34,7 @@ class _AdminScreenState extends State<AdminScreen> {
         title: l10n.addPizza,
         action: PrimaryButton(
           icon: Icons.add,
-          onPressed: () {
-            _adminBloc.add(
-              AdminSaveEvent(
-                wrappers: [
-                  PizzaWrapper(
-                    title: 'title3',
-                    price: 10,
-                    imageUrl:
-                        'https://staticy.dominospizza.ru/api/medium/ProductOsg/Web/CHITER/NULL/NULL/RU',
-                    amount: 0,
-                    maxAmount: 1,
-                  ),
-                ],
-              ),
-            );
-          },
+          onPressed: () {},
         ),
       ),
       body: BlocBuilder<AdminBloc, AdminState>(
@@ -91,6 +76,16 @@ class _AdminScreenState extends State<AdminScreen> {
 
           return const LoadingWidget();
         },
+      ),
+      bottomNavigationBar: BigButton(
+        child: Text(
+          l10n.save,
+          style: theme.textTheme.button?.copyWith(
+            color: theme.scaffoldBackgroundColor,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        onPressed: () {},
       ),
     );
   }
