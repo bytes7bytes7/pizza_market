@@ -5,7 +5,7 @@ import '../constants/colors.dart' as const_colors;
 final lightTheme = ThemeData(
   primaryColor: const_colors.torchRed,
   scaffoldBackgroundColor: const_colors.white,
-  disabledColor: const_colors.torchRed.withOpacity(0.1),
+  disabledColor: const_colors.tickleMePink,
   hintColor: const_colors.brightGray,
   textTheme: _textTheme,
   progressIndicatorTheme: const ProgressIndicatorThemeData(
@@ -16,6 +16,10 @@ final lightTheme = ThemeData(
     titleTextStyle: _textTheme.headline5,
     elevation: 0,
     centerTitle: false,
+  ),
+  buttonTheme: ButtonThemeData(
+    buttonColor: const_colors.torchRed,
+    disabledColor: const_colors.torchRed.withOpacity(0.1),
   ),
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: _textTheme.subtitle1,
@@ -55,6 +59,7 @@ final lightTheme = ThemeData(
           return const_colors.torchRed;
         },
       ),
+      shadowColor: MaterialStateProperty.all(Colors.transparent),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(

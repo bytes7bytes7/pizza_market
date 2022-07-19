@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'constants/routes.dart' as const_routes;
 import 'screens/screens.dart';
 
+part 'custom_route_builder.dart';
+
 class ScreenRouter {
   ScreenRouter._();
 
@@ -20,16 +22,19 @@ class ScreenRouter {
 
     switch (name) {
       case const_routes.home:
-        return _route(const HomeScreen());
+        return _left(const HomeScreen());
       case const_routes.cart:
-        return _route(const CartScreen());
+        return _left(const CartScreen());
       case const_routes.admin:
-        return _route(const AdminScreen());
+        return _left(const AdminScreen());
       default:
-        return _route(const NotFoundScreen());
+        return _left(const NotFoundScreen());
     }
   }
 
-  MaterialPageRoute _route(Widget screen) =>
-      MaterialPageRoute(builder: (context) => screen);
+  Route _left(Widget page) => CustomRouteBuilder(
+        page,
+        begin: const Offset(1.0, 0.0),
+        end: Offset.zero,
+      );
 }

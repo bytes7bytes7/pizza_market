@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/pizza/pizza_bloc.dart';
-import '../constants/app.dart' as const_app;
-import '../constants/colors.dart' as const_colors;
 import '../constants/routes.dart' as const_routes;
+import '../l10n/l10n.dart';
 import '../widgets/widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,41 +26,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: const Text(const_app.appName),
+        title: Text(l10n.appName),
         actions: [
-          GradientIconButton(
-            icon: const Icon(Icons.shopping_basket),
-            onPressed: () {},
-            shaderCallback: (bounds) {
-              return const LinearGradient(
-                colors: [
-                  const_colors.torchRed,
-                  const_colors.tickleMePink,
-                ],
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-              ).createShader(bounds);
-            },
+          ShaderMask(
+            shaderCallback: (bounds) => LinearGradient(
+              colors: [
+                theme.primaryColor,
+                theme.disabledColor,
+              ],
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+            ).createShader(bounds),
+            child: IconButton(
+              icon: const Icon(Icons.shopping_basket),
+              onPressed: () {},
+            ),
           ),
-          GradientIconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.of(context).pushNamed(const_routes.admin);
-            },
-            shaderCallback: (bounds) {
-              return const LinearGradient(
-                colors: [
-                  const_colors.torchRed,
-                  const_colors.tickleMePink,
-                ],
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-              ).createShader(bounds);
-            },
+          ShaderMask(
+            shaderCallback: (bounds) => LinearGradient(
+              colors: [
+                theme.primaryColor,
+                theme.disabledColor,
+              ],
+              begin: Alignment.bottomRight,
+              end: Alignment.topLeft,
+            ).createShader(bounds),
+            child: IconButton(
+              icon: const Icon(Icons.person),
+              onPressed: () {
+                Navigator.of(context).pushNamed(const_routes.admin);
+              },
+            ),
           ),
         ],
       ),
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (wrappers.isEmpty) {
               return Center(
                 child: Text(
-                  'Пусто',
+                  l10n.empty,
                   style: theme.textTheme.headline6,
                 ),
               );
@@ -104,19 +104,13 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             );
           } else if (state is PizzaErrorState) {
-            return Center(
-              child: Column(
-                children: [
-                  Text('Ошибка'),
-                  Text('${state.error}\n\n${state.stackTrace}'),
-                  TextButton(
-                    child: Text('Попробовать снова'),
-                    onPressed: () {
-                      _pizzaBloc.add(const PizzaLoadEvent());
-                    },
-                  )
-                ],
-              ),
+            return ErrorLabel(
+              error: state.error,
+              stackTrace: state.stackTrace,
+              buttonText: l10n.tryAgain,
+              onPressed: () {
+                _pizzaBloc.add(const PizzaLoadEvent());
+              },
             );
           }
 

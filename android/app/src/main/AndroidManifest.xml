@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bytes7bytes7.pizza_market">
    <application
-        android:label="pizza_market"
+        android:label="Pizza Market"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

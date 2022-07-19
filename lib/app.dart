@@ -48,7 +48,6 @@ class App extends StatelessWidget {
           Locale('ru', ''),
           Locale('en', ''),
         ],
-        home: const HomeScreen(),
         navigatorKey: ScreenRouter.inst.navigatorKey,
         onGenerateInitialRoutes: (_) => [
           ScreenRouter.inst.navigate(
