@@ -5,6 +5,8 @@ import '../constants/measures.dart' as const_measures;
 import '../l10n/l10n.dart';
 import 'amount_bar.dart';
 
+const pizzaSettingCardExtent = 235.0;
+
 class PizzaSettingCard extends StatefulWidget {
   const PizzaSettingCard({
     super.key,
@@ -47,6 +49,7 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
     final l10n = context.l10n;
 
     return Container(
+      height: pizzaSettingCardExtent,
       padding: const EdgeInsets.symmetric(
         vertical: const_measures.largePadding,
       ),

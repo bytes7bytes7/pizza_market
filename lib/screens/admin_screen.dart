@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pizza_repo/pizza_repo.dart';
 
 import '../blocs/blocs.dart';
 import '../l10n/l10n.dart';
@@ -13,13 +14,23 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
+  late final ScrollController _scrollController;
   late final AdminBloc _adminBloc;
+  final _items = <PizzaWrapper>[];
 
   @override
   void initState() {
     super.initState();
 
+    _scrollController = ScrollController();
     _adminBloc = context.read<AdminBloc>();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -28,11 +39,33 @@ class _AdminScreenState extends State<AdminScreen> {
     final l10n = context.l10n;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: DefaultAppBar(
         title: l10n.addPizza,
         action: PrimaryButton(
           icon: Icons.add,
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              _items.add(
+                const PizzaWrapper(
+                  title: '',
+                  price: 0,
+                  imageUrl: '',
+                  amount: 0,
+                  maxAmount: 1,
+                ),
+              );
+              Future.delayed(const Duration(milliseconds: 300), () {
+                if (_scrollController.hasClients) {
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    duration: const Duration(milliseconds: 1500),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                }
+              });
+            });
+          },
         ),
       ),
       body: Column(
@@ -47,7 +80,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 if (state is AdminDataState) {
                   final wrappers = state.wrappers;
 
-                  if (wrappers.isEmpty) {
+                  if (wrappers.isEmpty && _items.isEmpty) {
                     return Center(
                       child: Text(
                         l10n.empty,
@@ -58,10 +91,18 @@ class _AdminScreenState extends State<AdminScreen> {
 
                   return ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: wrappers.length,
+                    controller: _scrollController,
+                    itemCount: wrappers.length + _items.length,
+                    itemExtent: pizzaSettingCardExtent,
                     itemBuilder: (context, index) {
+                      if (index < wrappers.length) {
+                        return PizzaSettingCard(
+                          wrapper: wrappers[index],
+                        );
+                      }
+
                       return PizzaSettingCard(
-                        wrapper: wrappers[index],
+                        wrapper: _items[index - wrappers.length],
                       );
                     },
                   );
