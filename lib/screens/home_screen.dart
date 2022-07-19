@@ -108,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         behavior: SnackBarBehavior.floating,
                         backgroundColor: theme.primaryColor,
+                        duration: const Duration(microseconds: 300),
                       ),
                     );
                   },

@@ -7,11 +7,11 @@ import 'common.dart';
 class OrderCard extends StatelessWidget {
   const OrderCard({
     super.key,
-    required this.cost,
+    required this.costNotifier,
     required this.onPressed,
   });
 
-  final double cost;
+  final ValueNotifier<double> costNotifier;
   final VoidCallback? onPressed;
 
   @override
@@ -52,54 +52,58 @@ class OrderCard extends StatelessWidget {
                   color: theme.scaffoldBackgroundColor,
                 ),
               ),
-              Text(
-                '\$${beautifyCost(cost)}',
-                style: theme.textTheme.headline6?.copyWith(
-                  color: theme.scaffoldBackgroundColor,
-                ),
+              ValueListenableBuilder<double>(
+                valueListenable: costNotifier,
+                builder: (context, value, child) {
+                  return Text(
+                    '\$${beautifyCost(value)}',
+                    style: theme.textTheme.headline6?.copyWith(
+                      color: theme.scaffoldBackgroundColor,
+                    ),
+                  );
+                },
               ),
             ],
           ),
           const SizedBox(
             height: const_measures.smallPadding,
           ),
-          ElevatedButton(
-            onPressed: onPressed,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith(
-                (states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return theme.disabledColor.withOpacity(
-                      const_measures.smallOpacity,
-                    );
-                  }
-                  return theme.scaffoldBackgroundColor;
-                },
-              ),
-              padding: MaterialStateProperty.all(
-                const EdgeInsets.all(
-                  const_measures.bigPadding,
-                ),
-              ),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    const_measures.largeRadius,
-                  ),
-                ),
-              ),
-              overlayColor: MaterialStateProperty.all(
-                theme.disabledColor.withOpacity(
-                  const_measures.smallOpacity,
-                ),
-              ),
-            ),
+          ValueListenableBuilder<double>(
+            valueListenable: costNotifier,
             child: Text(
               l10n.placeOrder,
               style: theme.textTheme.button?.copyWith(
                 color: theme.primaryColor,
               ),
             ),
+            builder: (context, value, child) {
+              return ElevatedButton(
+                onPressed: value != 0 ? onPressed : null,
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    theme.scaffoldBackgroundColor,
+                  ),
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.all(
+                      const_measures.bigPadding,
+                    ),
+                  ),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        const_measures.largeRadius,
+                      ),
+                    ),
+                  ),
+                  overlayColor: MaterialStateProperty.all(
+                    theme.disabledColor.withOpacity(
+                      const_measures.smallOpacity,
+                    ),
+                  ),
+                ),
+                child: child,
+              );
+            },
           ),
         ],
       ),
