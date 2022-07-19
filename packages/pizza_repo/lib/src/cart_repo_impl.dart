@@ -22,17 +22,11 @@ class CartRepoImpl implements CartRepo {
   }
 
   @override
-  Future<void> update(PizzaWrapper wrapper) async {
-    final json = wrapper.toJson();
-    final id = json[pizza_const.id];
+  Future<void> update(List<PizzaWrapper> wrappers) async {
     return _db.update(
       pizza_const.cartTable,
-      [json],
-      where: [
-        {
-          pizza_const.id: id,
-        }
-      ],
+      wrappers.map((e) => e.toJson()).toList(),
+      where: wrappers.map((e) => {pizza_const.id: e.id}).toList(),
     );
   }
 

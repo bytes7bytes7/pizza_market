@@ -16,10 +16,21 @@ class PizzaLoadingState extends PizzaState {
 }
 
 class PizzaDataState extends PizzaState {
-  const PizzaDataState(this.pizzas);
+  const PizzaDataState(this.wrappers, this.cartCost);
 
-  final List<Pizza> pizzas;
+  final List<PizzaWrapper> wrappers;
+  final double cartCost;
 
   @override
-  List<Object> get props => [pizzas];
+  List<Object> get props => [wrappers, cartCost];
+}
+
+class PizzaErrorState extends PizzaState {
+  const PizzaErrorState(this.error, this.stackTrace);
+
+  final Object error;
+  final StackTrace stackTrace;
+
+  @override
+  List<Object?> get props => [error, stackTrace];
 }

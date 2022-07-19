@@ -12,10 +12,28 @@ class PizzaLoadEvent extends PizzaEvent {
 }
 
 class PizzaPickEvent extends PizzaEvent {
-  const PizzaPickEvent({required this.pizza});
+  const PizzaPickEvent({required this.wrapper});
 
-  final Pizza pizza;
+  final PizzaWrapper wrapper;
 
   @override
-  List<Object> get props => [pizza];
+  List<Object> get props => [wrapper];
+}
+
+class PizzaUpdateEvent extends PizzaEvent {
+  const PizzaUpdateEvent({required this.wrappers});
+
+  final List<PizzaWrapper> wrappers;
+
+  @override
+  List<Object> get props => [wrappers];
+}
+
+class PizzaOrderEvent extends PizzaEvent {
+  const PizzaOrderEvent({required this.wrappers});
+
+  final List<PizzaWrapper> wrappers;
+
+  @override
+  List<Object> get props => [wrappers];
 }

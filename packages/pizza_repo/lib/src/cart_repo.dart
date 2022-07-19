@@ -7,7 +7,7 @@ abstract class CartRepo {
 
   Future<void> pick(PizzaWrapper wrapper);
 
-  Future<void> update(PizzaWrapper wrapper);
+  Future<void> update(List<PizzaWrapper> wrappers);
 
   Future<void> order(List<PizzaWrapper> wrappers);
 }

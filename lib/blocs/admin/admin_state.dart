@@ -23,3 +23,13 @@ class AdminDataState extends AdminState {
   @override
   List<Object?> get props => [wrappers];
 }
+
+class AdminErrorState extends AdminState {
+  const AdminErrorState(this.error, this.stackTrace);
+
+  final Object error;
+  final StackTrace stackTrace;
+
+  @override
+  List<Object?> get props => [error, stackTrace];
+}
