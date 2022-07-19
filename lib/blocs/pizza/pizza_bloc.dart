@@ -117,7 +117,7 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
 
     final newWrappers = List<PizzaWrapper>.from(prevState.wrappers);
     for (final w in event.wrappers) {
-      final index = prevState.wrappers.indexWhere((e) => e.id == w.id);
+      final index = newWrappers.indexWhere((e) => e.id == w.id);
 
       if (index != -1) {
         newWrappers.removeAt(index);

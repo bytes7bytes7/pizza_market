@@ -68,42 +68,36 @@ class OrderCard extends StatelessWidget {
           const SizedBox(
             height: const_measures.smallPadding,
           ),
-          ValueListenableBuilder<double>(
-            valueListenable: costNotifier,
+          ElevatedButton(
+            onPressed: onPressed,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                theme.scaffoldBackgroundColor,
+              ),
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.all(
+                  const_measures.bigPadding,
+                ),
+              ),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    const_measures.largeRadius,
+                  ),
+                ),
+              ),
+              overlayColor: MaterialStateProperty.all(
+                theme.disabledColor.withOpacity(
+                  const_measures.smallOpacity,
+                ),
+              ),
+            ),
             child: Text(
               l10n.placeOrder,
               style: theme.textTheme.button?.copyWith(
                 color: theme.primaryColor,
               ),
             ),
-            builder: (context, value, child) {
-              return ElevatedButton(
-                onPressed: value != 0 ? onPressed : null,
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    theme.scaffoldBackgroundColor,
-                  ),
-                  padding: MaterialStateProperty.all(
-                    const EdgeInsets.all(
-                      const_measures.bigPadding,
-                    ),
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        const_measures.largeRadius,
-                      ),
-                    ),
-                  ),
-                  overlayColor: MaterialStateProperty.all(
-                    theme.disabledColor.withOpacity(
-                      const_measures.smallOpacity,
-                    ),
-                  ),
-                ),
-                child: child,
-              );
-            },
           ),
         ],
       ),

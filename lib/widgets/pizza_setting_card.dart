@@ -214,7 +214,11 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
     if (value?.isNotEmpty == true) {
       if (value != null) {
         try {
-          double.parse(value);
+          final n = double.parse(value);
+          if (n <= 0) {
+            throw Exception();
+          }
+
           return null;
         } catch (e) {
           return error;

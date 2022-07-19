@@ -53,6 +53,7 @@ class AdminBloc extends Bloc<AdminEvent, AdminState> {
 
     await _pizzaRepo.update(newWrappers);
 
+    // reason: get ids
     add(const AdminLoadEvent());
   }
 
