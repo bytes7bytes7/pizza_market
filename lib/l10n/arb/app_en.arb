@@ -1,0 +1,11 @@
+{
+    "addPizza": "Add pizza",
+    "appName": "Pizza Market",
+    "error": "Error",
+    "name":"Name",
+    "orderDetails": "Order details",
+    "placeOrder": "Place my order",
+    "price": "Price",
+    "save": "Save",
+    "total": "Total"
+}

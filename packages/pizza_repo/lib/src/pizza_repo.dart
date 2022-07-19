@@ -1,7 +1,9 @@
 import 'wrappers/wrappers.dart';
 
-abstract class CartRepo {
-  const CartRepo();
+abstract class PizzaRepo {
+  const PizzaRepo();
+
+  Future<void> init();
 
   Future<List<PizzaWrapper>> load();
 

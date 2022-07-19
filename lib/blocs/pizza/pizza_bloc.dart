@@ -12,7 +12,7 @@ part 'pizza_event.dart';
 part 'pizza_state.dart';
 
 class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
-  PizzaBloc(this._adminBloc, this._cartRepo) : super(const PizzaInitState()) {
+  PizzaBloc(this._adminBloc, this._pizzaRepo) : super(const PizzaInitState()) {
     on<PizzaLoadEvent>(_load);
     on<PizzaPickEvent>(_pick);
     on<PizzaUpdateEvent>(_update);
@@ -26,7 +26,8 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
   }
 
   final AdminBloc _adminBloc;
-  final CartRepo _cartRepo;
+  final PizzaRepo _pizzaRepo;
+  bool _repoInitialized = false;
   late final StreamSubscription _adminSub;
   PizzaDataState _lastDataState = const PizzaDataState([], 0);
 
@@ -38,17 +39,21 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
   }
 
   Future<void> _load(PizzaLoadEvent event, Emitter<PizzaState> emit) async {
+    await _initRepo();
+
     if (state is! PizzaLoadingState) {
       emit(const PizzaLoadingState());
     }
 
-    final data = await _cartRepo.load();
+    final data = await _pizzaRepo.load();
 
     final newState = _lastDataState = PizzaDataState(data, _cartCost(data));
     emit(newState);
   }
 
   Future<void> _pick(PizzaPickEvent event, Emitter<PizzaState> emit) async {
+    await _initRepo();
+
     final wrapper = event.wrapper.copyWith(amount: 1);
     final prevState = _lastDataState;
 
@@ -62,11 +67,13 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
           _lastDataState = PizzaDataState(newWrappers, _cartCost(newWrappers));
       emit(newState);
 
-      unawaited(_cartRepo.pick(wrapper));
+      unawaited(_pizzaRepo.pick(wrapper));
     }
   }
 
   Future<void> _update(PizzaUpdateEvent event, Emitter<PizzaState> emit) async {
+    await _initRepo();
+
     final prevState = _lastDataState;
 
     final oldWrappers = prevState.wrappers;
@@ -90,10 +97,12 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
         _lastDataState = PizzaDataState(newWrappers, _cartCost(newWrappers));
     emit(newState);
 
-    unawaited(_cartRepo.update(newWrappers));
+    unawaited(_pizzaRepo.update(newWrappers));
   }
 
   Future<void> _order(PizzaOrderEvent event, Emitter<PizzaState> emit) async {
+    await _initRepo();
+
     final prevState = _lastDataState;
 
     final order = prevState.wrappers.where((e) => e.amount > 0);
@@ -110,11 +119,18 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
     final newState = _lastDataState = PizzaDataState(newWrappers, 0);
     emit(newState);
 
-    unawaited(_cartRepo.order(order.toList()));
+    unawaited(_pizzaRepo.order(order.toList()));
+  }
+
+  Future<void> _initRepo()async {
+    if (!_repoInitialized) {
+      await _pizzaRepo.init();
+      _repoInitialized = true;
+    }
   }
 
   double _cartCost(List<PizzaWrapper> wrappers) => wrappers.fold<double>(
         0.0,
-        (prev, curr) => prev + ((curr.amount > 0) ? curr.pizza.price : 0),
+        (prev, curr) => prev + ((curr.amount > 0) ? curr.price : 0),
       );
 }

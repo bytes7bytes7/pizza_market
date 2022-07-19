@@ -9,8 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # Local
+  db_helper:
+    path: packages/db_helper
   pizza_repo:
     path: packages/pizza_repo
 
@@ -19,11 +23,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  build_runner: ^2.1.11
 
 flutter:
+  generate: true
   uses-material-design: true

@@ -9,7 +9,9 @@ part of 'pizza_wrapper.dart';
 _$_PizzaWrapper _$$_PizzaWrapperFromJson(Map<String, dynamic> json) =>
     _$_PizzaWrapper(
       id: json['id'] as String,
-      pizza: Pizza.fromJson(json['pizza'] as Map<String, dynamic>),
+      title: json['title'] as String,
+      price: (json['price'] as num).toDouble(),
+      imageUrl: json['imageUrl'] as String,
       amount: json['amount'] as int,
       maxAmount: json['maxAmount'] as int,
     );
@@ -17,7 +19,9 @@ _$_PizzaWrapper _$$_PizzaWrapperFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_PizzaWrapperToJson(_$_PizzaWrapper instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'pizza': instance.pizza,
+      'title': instance.title,
+      'price': instance.price,
+      'imageUrl': instance.imageUrl,
       'amount': instance.amount,
       'maxAmount': instance.maxAmount,
     };

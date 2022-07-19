@@ -1,10 +1,10 @@
 class Field {
-  const Field(
-    this.title,
-    this.type,
-    this.nullable,
-    this.primary,
-  );
+  const Field({
+    required this.title,
+    required this.type,
+    this.nullable = true,
+    this.primary = false,
+  });
 
   final String title;
   final Type type;

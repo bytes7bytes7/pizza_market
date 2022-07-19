@@ -40,7 +40,7 @@ class DBHelperImpl implements DBHelper {
   }) async {
     final db = await database;
     var sql =
-        StringBuffer('CREATE TABLE ${force ? "" : "IF NOT EXISTS"}$table (');
+        StringBuffer('CREATE TABLE ${force ? "" : "IF NOT EXISTS"} $table (');
     for (var e in fields) {
       final nullable = e.nullable ? '' : 'NOT NULL';
       var type = '';

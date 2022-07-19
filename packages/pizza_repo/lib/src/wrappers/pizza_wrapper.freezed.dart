@@ -20,8 +20,11 @@ PizzaWrapper _$PizzaWrapperFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PizzaWrapper {
+  @JsonKey(name: pizza_const.id)
   String get id => throw _privateConstructorUsedError;
-  Pizza get pizza => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  double get price => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
   int get amount => throw _privateConstructorUsedError;
   int get maxAmount => throw _privateConstructorUsedError;
 
@@ -36,9 +39,13 @@ abstract class $PizzaWrapperCopyWith<$Res> {
   factory $PizzaWrapperCopyWith(
           PizzaWrapper value, $Res Function(PizzaWrapper) then) =
       _$PizzaWrapperCopyWithImpl<$Res>;
-  $Res call({String id, Pizza pizza, int amount, int maxAmount});
-
-  $PizzaCopyWith<$Res> get pizza;
+  $Res call(
+      {@JsonKey(name: pizza_const.id) String id,
+      String title,
+      double price,
+      String imageUrl,
+      int amount,
+      int maxAmount});
 }
 
 /// @nodoc
@@ -52,7 +59,9 @@ class _$PizzaWrapperCopyWithImpl<$Res> implements $PizzaWrapperCopyWith<$Res> {
   @override
   $Res call({
     Object? id = freezed,
-    Object? pizza = freezed,
+    Object? title = freezed,
+    Object? price = freezed,
+    Object? imageUrl = freezed,
     Object? amount = freezed,
     Object? maxAmount = freezed,
   }) {
@@ -61,10 +70,18 @@ class _$PizzaWrapperCopyWithImpl<$Res> implements $PizzaWrapperCopyWith<$Res> {
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      pizza: pizza == freezed
-          ? _value.pizza
-          : pizza // ignore: cast_nullable_to_non_nullable
-              as Pizza,
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      price: price == freezed
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as double,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       amount: amount == freezed
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -75,13 +92,6 @@ class _$PizzaWrapperCopyWithImpl<$Res> implements $PizzaWrapperCopyWith<$Res> {
               as int,
     ));
   }
-
-  @override
-  $PizzaCopyWith<$Res> get pizza {
-    return $PizzaCopyWith<$Res>(_value.pizza, (value) {
-      return _then(_value.copyWith(pizza: value));
-    });
-  }
 }
 
 /// @nodoc
@@ -91,10 +101,13 @@ abstract class _$$_PizzaWrapperCopyWith<$Res>
           _$_PizzaWrapper value, $Res Function(_$_PizzaWrapper) then) =
       __$$_PizzaWrapperCopyWithImpl<$Res>;
   @override
-  $Res call({String id, Pizza pizza, int amount, int maxAmount});
-
-  @override
-  $PizzaCopyWith<$Res> get pizza;
+  $Res call(
+      {@JsonKey(name: pizza_const.id) String id,
+      String title,
+      double price,
+      String imageUrl,
+      int amount,
+      int maxAmount});
 }
 
 /// @nodoc
@@ -111,7 +124,9 @@ class __$$_PizzaWrapperCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? pizza = freezed,
+    Object? title = freezed,
+    Object? price = freezed,
+    Object? imageUrl = freezed,
     Object? amount = freezed,
     Object? maxAmount = freezed,
   }) {
@@ -120,10 +135,18 @@ class __$$_PizzaWrapperCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      pizza: pizza == freezed
-          ? _value.pizza
-          : pizza // ignore: cast_nullable_to_non_nullable
-              as Pizza,
+      title: title == freezed
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      price: price == freezed
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as double,
+      imageUrl: imageUrl == freezed
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       amount: amount == freezed
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -140,8 +163,10 @@ class __$$_PizzaWrapperCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_PizzaWrapper implements _PizzaWrapper {
   const _$_PizzaWrapper(
-      {required this.id,
-      required this.pizza,
+      {@JsonKey(name: pizza_const.id) required this.id,
+      required this.title,
+      required this.price,
+      required this.imageUrl,
       required this.amount,
       required this.maxAmount});
 
@@ -149,9 +174,14 @@ class _$_PizzaWrapper implements _PizzaWrapper {
       _$$_PizzaWrapperFromJson(json);
 
   @override
+  @JsonKey(name: pizza_const.id)
   final String id;
   @override
-  final Pizza pizza;
+  final String title;
+  @override
+  final double price;
+  @override
+  final String imageUrl;
   @override
   final int amount;
   @override
@@ -159,7 +189,7 @@ class _$_PizzaWrapper implements _PizzaWrapper {
 
   @override
   String toString() {
-    return 'PizzaWrapper(id: $id, pizza: $pizza, amount: $amount, maxAmount: $maxAmount)';
+    return 'PizzaWrapper(id: $id, title: $title, price: $price, imageUrl: $imageUrl, amount: $amount, maxAmount: $maxAmount)';
   }
 
   @override
@@ -168,7 +198,9 @@ class _$_PizzaWrapper implements _PizzaWrapper {
         (other.runtimeType == runtimeType &&
             other is _$_PizzaWrapper &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.pizza, pizza) &&
+            const DeepCollectionEquality().equals(other.title, title) &&
+            const DeepCollectionEquality().equals(other.price, price) &&
+            const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
             const DeepCollectionEquality().equals(other.amount, amount) &&
             const DeepCollectionEquality().equals(other.maxAmount, maxAmount));
   }
@@ -178,7 +210,9 @@ class _$_PizzaWrapper implements _PizzaWrapper {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(pizza),
+      const DeepCollectionEquality().hash(title),
+      const DeepCollectionEquality().hash(price),
+      const DeepCollectionEquality().hash(imageUrl),
       const DeepCollectionEquality().hash(amount),
       const DeepCollectionEquality().hash(maxAmount));
 
@@ -197,8 +231,10 @@ class _$_PizzaWrapper implements _PizzaWrapper {
 
 abstract class _PizzaWrapper implements PizzaWrapper {
   const factory _PizzaWrapper(
-      {required final String id,
-      required final Pizza pizza,
+      {@JsonKey(name: pizza_const.id) required final String id,
+      required final String title,
+      required final double price,
+      required final String imageUrl,
       required final int amount,
       required final int maxAmount}) = _$_PizzaWrapper;
 
@@ -206,9 +242,14 @@ abstract class _PizzaWrapper implements PizzaWrapper {
       _$_PizzaWrapper.fromJson;
 
   @override
+  @JsonKey(name: pizza_const.id)
   String get id;
   @override
-  Pizza get pizza;
+  String get title;
+  @override
+  double get price;
+  @override
+  String get imageUrl;
   @override
   int get amount;
   @override
