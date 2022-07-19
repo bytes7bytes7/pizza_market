@@ -91,8 +91,8 @@ final lightTheme = ThemeData(
         },
       ),
       overlayColor: MaterialStateProperty.all(
-        const_colors.tickleMePink.withOpacity(
-          const_measures.smallOpacity,
+        const_colors.white.withOpacity(
+          const_measures.midOpacity,
         ),
       ),
       shadowColor: MaterialStateProperty.all(Colors.transparent),

@@ -39,14 +39,25 @@ class PizzaPreviewCard extends StatelessWidget {
       child: IntrinsicHeight(
         child: ElevatedButton(
           onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            padding: const EdgeInsets.all(
-              const_measures.smallPadding,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              Colors.transparent,
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                const_measures.bigRadius,
+            padding: MaterialStateProperty.all(
+              const EdgeInsets.all(
+                const_measures.smallPadding,
+              ),
+            ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                  const_measures.bigRadius,
+                ),
+              ),
+            ),
+            overlayColor: MaterialStateProperty.all(
+              theme.disabledColor.withOpacity(
+                const_measures.smallOpacity,
               ),
             ),
           ),

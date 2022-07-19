@@ -35,52 +35,53 @@ class _AdminScreenState extends State<AdminScreen> {
           onPressed: () {},
         ),
       ),
-      body: Stack(
+      body: Column(
         children: [
-          BlocBuilder<AdminBloc, AdminState>(
-            builder: (context, state) {
-              if (state is AdminInitState) {
-                _adminBloc.add(const AdminLoadEvent());
-              }
+          Expanded(
+            child: BlocBuilder<AdminBloc, AdminState>(
+              builder: (context, state) {
+                if (state is AdminInitState) {
+                  _adminBloc.add(const AdminLoadEvent());
+                }
 
-              if (state is AdminDataState) {
-                final wrappers = state.wrappers;
+                if (state is AdminDataState) {
+                  final wrappers = state.wrappers;
 
-                if (wrappers.isEmpty) {
-                  return Center(
-                    child: Text(
-                      l10n.empty,
-                      style: theme.textTheme.headline6,
-                    ),
+                  if (wrappers.isEmpty) {
+                    return Center(
+                      child: Text(
+                        l10n.empty,
+                        style: theme.textTheme.headline6,
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: wrappers.length,
+                    itemBuilder: (context, index) {
+                      return PizzaSettingCard(
+                        wrapper: wrappers[index],
+                      );
+                    },
+                  );
+                } else if (state is AdminErrorState) {
+                  return ErrorLabel(
+                    error: state.error,
+                    stackTrace: state.stackTrace,
+                    buttonText: l10n.tryAgain,
+                    onPressed: () {
+                      _adminBloc.add(const AdminLoadEvent());
+                    },
                   );
                 }
 
-                return ListView.builder(
-                  itemCount: wrappers.length,
-                  itemBuilder: (context, index) {
-                    return PizzaSettingCard(
-                      wrapper: wrappers[index],
-                    );
-                  },
-                );
-              } else if (state is AdminErrorState) {
-                return ErrorLabel(
-                  error: state.error,
-                  stackTrace: state.stackTrace,
-                  buttonText: l10n.tryAgain,
-                  onPressed: () {
-                    _adminBloc.add(const AdminLoadEvent());
-                  },
-                );
-              }
-
-              return const LoadingWidget();
-            },
+                return const LoadingWidget();
+              },
+            ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
+          FractionallySizedBox(
+            widthFactor: 1,
             child: BigButton(
               child: Text(
                 l10n.save,

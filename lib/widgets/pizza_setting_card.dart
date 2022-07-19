@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pizza_repo/pizza_repo.dart';
 
-import '../blocs/blocs.dart';
 import '../constants/measures.dart' as const_measures;
 import '../l10n/l10n.dart';
 import 'amount_bar.dart';
@@ -20,7 +18,6 @@ class PizzaSettingCard extends StatefulWidget {
 }
 
 class _PizzaSettingCardState extends State<PizzaSettingCard> {
-  late final AdminBloc _adminBloc;
   late final ValueNotifier<int> _amountNotifier;
   late final TextEditingController _nameController;
   late final TextEditingController _priceController;
@@ -30,7 +27,6 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
   void initState() {
     super.initState();
 
-    _adminBloc = context.read<AdminBloc>();
     _amountNotifier = ValueNotifier(widget.wrapper.maxAmount);
     _nameController = TextEditingController()..clear();
     _priceController = TextEditingController()..clear();

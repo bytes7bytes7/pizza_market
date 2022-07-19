@@ -53,7 +53,7 @@ class OrderCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '\S${beautifyCost(cost)}',
+                '\$${beautifyCost(cost)}',
                 style: theme.textTheme.headline6?.copyWith(
                   color: theme.scaffoldBackgroundColor,
                 ),
@@ -65,14 +65,32 @@ class OrderCard extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: onPressed,
-            style: ElevatedButton.styleFrom(
-              primary: theme.scaffoldBackgroundColor,
-              padding: const EdgeInsets.all(
-                const_measures.bigPadding,
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith(
+                (states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return theme.disabledColor.withOpacity(
+                      const_measures.smallOpacity,
+                    );
+                  }
+                  return theme.scaffoldBackgroundColor;
+                },
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  const_measures.largeRadius,
+              padding: MaterialStateProperty.all(
+                const EdgeInsets.all(
+                  const_measures.bigPadding,
+                ),
+              ),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    const_measures.largeRadius,
+                  ),
+                ),
+              ),
+              overlayColor: MaterialStateProperty.all(
+                theme.disabledColor.withOpacity(
+                  const_measures.smallOpacity,
                 ),
               ),
             ),

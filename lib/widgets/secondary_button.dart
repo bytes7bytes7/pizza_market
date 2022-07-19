@@ -41,14 +41,14 @@ class SecondaryButton extends StatelessWidget {
                 const_measures.smallRadius,
               ),
               splashColor: theme.scaffoldBackgroundColor.withOpacity(
-                const_measures.midOpacity,
+                const_measures.bigOpacity,
               ),
               onTap: onPressed,
               child: Icon(
                 icon,
                 size: iconSize,
                 color: theme.primaryColor.withOpacity(
-                  const_measures.midOpacity,
+                  const_measures.bigOpacity,
                 ),
               ),
             ),

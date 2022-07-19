@@ -67,7 +67,7 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
           _lastDataState = PizzaDataState(newWrappers, _cartCost(newWrappers));
       emit(newState);
 
-      unawaited(_pizzaRepo.pick(wrapper));
+      unawaited(_pizzaRepo.update([wrapper]));
     }
   }
 

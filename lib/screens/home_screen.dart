@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/blocs.dart';
-import '../constants/measures.dart' as const_measures;
 import '../constants/routes.dart' as const_routes;
 import '../l10n/l10n.dart';
 import '../widgets/widgets.dart';
@@ -77,9 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           if (state is PizzaDataState) {
-            final wrappers = state.wrappers;
+            final notInCart =
+                state.wrappers.where((e) => e.amount == 0).toList();
 
-            if (wrappers.isEmpty) {
+            if (notInCart.isEmpty) {
               return Center(
                 child: Text(
                   l10n.empty,
@@ -89,11 +89,18 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             return ListView.builder(
-              itemCount: wrappers.length,
+              physics: const BouncingScrollPhysics(),
+              itemCount: notInCart.length,
               itemBuilder: (context, index) {
+                final wrapper = notInCart[index];
+
                 return PizzaPreviewCard(
-                  wrapper: wrappers[index],
-                  onPressed: () {},
+                  wrapper: wrapper,
+                  onPressed: () {
+                    _pizzaBloc.add(
+                      PizzaPickEvent(wrapper: wrapper),
+                    );
+                  },
                 );
               },
             );
