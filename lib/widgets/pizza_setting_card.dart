@@ -5,7 +5,7 @@ import '../constants/measures.dart' as const_measures;
 import '../l10n/l10n.dart';
 import 'amount_bar.dart';
 import 'common.dart';
-import 'widgets.dart';
+import 'show_url_dialog.dart';
 
 const pizzaSettingCardExtent = 270.0;
 
@@ -24,9 +24,10 @@ class PizzaSettingCard extends StatefulWidget {
 }
 
 class _PizzaSettingCardState extends State<PizzaSettingCard> {
-  late final ValueNotifier<int> _amountNotifier;
   late final TextEditingController _nameController;
   late final TextEditingController _priceController;
+  late final ValueNotifier<int> _amountNotifier;
+  late final TextEditingController _imageUrlController;
   final _formKey = GlobalKey<FormState>();
   var _isValid = false;
   late PizzaWrapper _newWrapper;
@@ -35,13 +36,15 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
   void initState() {
     super.initState();
 
+    _nameController = TextEditingController(text: widget.wrapper.title)
+      ..addListener(_onChanged);
+    _priceController =
+        TextEditingController(text: beautifyCost(widget.wrapper.price))
+          ..addListener(_onChanged);
     _amountNotifier = ValueNotifier(widget.wrapper.maxAmount)
       ..addListener(_onChanged);
-    _nameController = TextEditingController(text: widget.wrapper.title);
-    _nameController.addListener(_onChanged);
-    _priceController =
-        TextEditingController(text: beautifyCost(widget.wrapper.price));
-    _priceController.addListener(_onChanged);
+    _imageUrlController = TextEditingController(text: widget.wrapper.imageUrl)
+      ..addListener(_onChanged);
     _newWrapper = widget.wrapper.copyWith();
   }
 
@@ -50,8 +53,7 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
       _newWrapper = _newWrapper.copyWith(
         title: _nameController.text,
         price: double.parse(_priceController.text),
-        // TODO: add image url
-        imageUrl: '',
+        imageUrl: _imageUrlController.text,
         amount: widget.wrapper.amount,
         maxAmount: _amountNotifier.value,
       );
@@ -74,9 +76,10 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
 
   @override
   void dispose() {
-    _amountNotifier.dispose();
     _nameController.dispose();
     _priceController.dispose();
+    _amountNotifier.dispose();
+    _imageUrlController.dispose();
 
     super.dispose();
   }
@@ -115,15 +118,21 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
             SizedBox(
               height: const_measures.midImageSize,
               width: const_measures.midImageSize,
-              child: (widget.wrapper.imageUrl.isNotEmpty)
-                  ? Image.network(
-                      widget.wrapper.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, trace) {
-                        return const Icon(Icons.photo);
-                      },
-                    )
-                  : const Icon(Icons.local_pizza_outlined),
+              child: IconButton(
+                icon: (_imageUrlController.text.isNotEmpty)
+                    ? Image.network(
+                        _imageUrlController.text,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, trace) {
+                          return const Icon(Icons.photo);
+                        },
+                      )
+                    : const Icon(Icons.local_pizza_outlined),
+                onPressed: () => showUrlDialog(
+                  context: context,
+                  controller: _imageUrlController,
+                ).then((_) => setState(() {})),
+              ),
             ),
             Flexible(
               child: Form(

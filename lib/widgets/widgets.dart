@@ -10,4 +10,5 @@ export 'pizza_setting_card.dart';
 export 'primary_button.dart';
 export 'return_button.dart';
 export 'secondary_button.dart';
+export 'show_url_dialog.dart';
 export 'simple_icon_button.dart';

@@ -9,8 +9,10 @@
             }
         },
     "appName": "Pizza Market",
+    "close": "Close",
     "empty": "Empty",
     "error": "Error",
+    "image": "Image",
     "invalid": "Invalid",
     "name":"Name",
     "orderDetails": "Order details",
@@ -18,5 +20,6 @@
     "price": "Price",
     "save": "Save",
     "total": "Total",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "url": "Link"
 }
