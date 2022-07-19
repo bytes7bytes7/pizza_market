@@ -1,5 +1,13 @@
 {
     "addPizza": "Add pizza",
+    "addedToCart": "Added to cart: {name}",
+        "@addedToCart": {
+            "placeholders": {
+                "name": {
+                    "type": "String"
+                }
+            }
+        },
     "appName": "Pizza Market",
     "empty": "Empty",
     "error": "Error",

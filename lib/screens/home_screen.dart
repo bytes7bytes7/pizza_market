@@ -100,6 +100,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     _pizzaBloc.add(
                       PizzaPickEvent(wrapper: wrapper),
                     );
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          l10n.addedToCart(wrapper.title),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: theme.primaryColor,
+                      ),
+                    );
                   },
                 );
               },

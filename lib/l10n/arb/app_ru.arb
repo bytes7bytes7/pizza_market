@@ -1,5 +1,13 @@
 {
     "addPizza": "Добавить пиццу",
+    "addedToCart": "Добавлен в заказ: {name}",
+    "@addedToCart": {
+        "placeholders": {
+            "name": {
+                "type": "String"
+            }
+        }
+    },
     "appName": "Пицца Маркет",
     "empty": "Пусто",
     "error": "Ошибка",
