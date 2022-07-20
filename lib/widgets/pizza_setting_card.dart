@@ -18,7 +18,8 @@ class PizzaSettingCard extends StatefulWidget {
   });
 
   final PizzaWrapper wrapper;
-  final void Function(bool isValid, [PizzaWrapper? wrapper]) onValidChanged;
+  final void Function(int id, bool isValid, [PizzaWrapper? wrapper])
+      onValidChanged;
 
   @override
   State<PizzaSettingCard> createState() => _PizzaSettingCardState();
@@ -60,6 +61,7 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
       );
 
       widget.onValidChanged(
+        _newWrapper.id,
         true,
         _newWrapper,
       );
@@ -70,7 +72,10 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
     } else {
       if (_isValid) {
         _isValid = false;
-        widget.onValidChanged(false);
+        widget.onValidChanged(
+          _newWrapper.id,
+          false,
+        );
       }
     }
   }

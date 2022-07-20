@@ -18,6 +18,8 @@ class AdminScreen extends StatefulWidget {
 
 class _AdminScreenState extends State<AdminScreen> {
   late final ScrollController _scrollController;
+
+  // {wrapper.id: isValid}
   late final ValueNotifier<Map<int, bool>> _validNotifier;
   late final AdminBloc _adminBloc;
   final _newItems = <PizzaWrapper>[];
@@ -54,6 +56,10 @@ class _AdminScreenState extends State<AdminScreen> {
           icon: Icons.add,
           onPressed: () {
             setState(() {
+              final map = Map<int, bool>.from(_validNotifier.value);
+              map[_maxID] = false;
+              _validNotifier.value = map;
+
               _newItems.add(
                 PizzaWrapper(
                   id: _maxID++,
@@ -109,15 +115,13 @@ class _AdminScreenState extends State<AdminScreen> {
                     itemBuilder: (context, index) {
                       if (index < wrappers.length) {
                         return PizzaSettingCard(
-                          onValidChanged: (value, [wrapper]) =>
-                              _onValidChanged(index, value, wrapper),
+                          onValidChanged: _onValidChanged,
                           wrapper: wrappers[index],
                         );
                       }
 
                       return PizzaSettingCard(
-                        onValidChanged: (value, [wrapper]) =>
-                            _onValidChanged(index, value, wrapper),
+                        onValidChanged: _onValidChanged,
                         wrapper: _newItems[index - wrappers.length],
                       );
                     },
@@ -175,7 +179,7 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
 
-  void _onValidChanged(int index, bool isValid, PizzaWrapper? wrapper) {
+  void _onValidChanged(int id, bool isValid, [PizzaWrapper? wrapper]) {
     if (wrapper != null) {
       final oldIndex = _needUpdate.indexWhere((e) => e.id == wrapper.id);
 
@@ -187,7 +191,7 @@ class _AdminScreenState extends State<AdminScreen> {
     }
 
     final map = Map<int, bool>.from(_validNotifier.value);
-    map[index] = isValid;
+    map[id] = isValid;
     _validNotifier.value = map;
   }
 }

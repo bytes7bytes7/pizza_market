@@ -85,6 +85,7 @@ class _PizzaControlCardState extends State<PizzaControlCard> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         widget.wrapper.title,
