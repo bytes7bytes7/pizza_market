@@ -21,7 +21,7 @@ PizzaWrapper _$PizzaWrapperFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$PizzaWrapper {
   @JsonKey(name: pizza_const.id)
-  int? get id => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   double get price => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $PizzaWrapperCopyWith<$Res> {
           PizzaWrapper value, $Res Function(PizzaWrapper) then) =
       _$PizzaWrapperCopyWithImpl<$Res>;
   $Res call(
-      {@JsonKey(name: pizza_const.id) int? id,
+      {@JsonKey(name: pizza_const.id) int id,
       String title,
       double price,
       String imageUrl,
@@ -69,7 +69,7 @@ class _$PizzaWrapperCopyWithImpl<$Res> implements $PizzaWrapperCopyWith<$Res> {
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -102,7 +102,7 @@ abstract class _$$_PizzaWrapperCopyWith<$Res>
       __$$_PizzaWrapperCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@JsonKey(name: pizza_const.id) int? id,
+      {@JsonKey(name: pizza_const.id) int id,
       String title,
       double price,
       String imageUrl,
@@ -134,7 +134,7 @@ class __$$_PizzaWrapperCopyWithImpl<$Res>
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       title: title == freezed
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -163,7 +163,7 @@ class __$$_PizzaWrapperCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_PizzaWrapper implements _PizzaWrapper {
   const _$_PizzaWrapper(
-      {@JsonKey(name: pizza_const.id) this.id,
+      {@JsonKey(name: pizza_const.id) required this.id,
       required this.title,
       required this.price,
       required this.imageUrl,
@@ -175,7 +175,7 @@ class _$_PizzaWrapper implements _PizzaWrapper {
 
   @override
   @JsonKey(name: pizza_const.id)
-  final int? id;
+  final int id;
   @override
   final String title;
   @override
@@ -231,7 +231,7 @@ class _$_PizzaWrapper implements _PizzaWrapper {
 
 abstract class _PizzaWrapper implements PizzaWrapper {
   const factory _PizzaWrapper(
-      {@JsonKey(name: pizza_const.id) final int? id,
+      {@JsonKey(name: pizza_const.id) required final int id,
       required final String title,
       required final double price,
       required final String imageUrl,
@@ -243,7 +243,7 @@ abstract class _PizzaWrapper implements PizzaWrapper {
 
   @override
   @JsonKey(name: pizza_const.id)
-  int? get id;
+  int get id;
   @override
   String get title;
   @override

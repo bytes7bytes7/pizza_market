@@ -16,6 +16,7 @@
     "invalid": "Недопустимо",
     "name":"Название",
     "orderDetails": "Детали заказа",
+    "orderHasBeenPlaced": "Заказ оформлен",
     "placeOrder": "Оформить заказ",
     "price": "Цена",
     "save": "Сохранить",

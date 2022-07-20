@@ -61,7 +61,7 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
     final prevState = _lastDataState;
 
     final newWrappers = List<PizzaWrapper>.from(prevState.wrappers);
-    final index = newWrappers.indexWhere((e) => e.id == event.wrapper.id);
+    final index = newWrappers.indexWhere((e) => e.id == wrapper.id);
 
     if (index != -1) {
       newWrappers[index] = wrapper;
@@ -107,7 +107,10 @@ class PizzaBloc extends Bloc<PizzaEvent, PizzaState> {
   Future<void> _change(PizzaChangeEvent event, Emitter<PizzaState> emit) async {
     await _initRepo();
 
-    emit(PizzaDataState(event.wrappers, _cartCost(event.wrappers)));
+    final newState = _lastDataState =
+        PizzaDataState(event.wrappers, _cartCost(event.wrappers));
+
+    emit(newState);
   }
 
   Future<void> _order(PizzaOrderEvent event, Emitter<PizzaState> emit) async {

@@ -6,6 +6,8 @@ import '../blocs/blocs.dart';
 import '../l10n/l10n.dart';
 import '../widgets/widgets.dart';
 
+const _snackDur = Duration(seconds: 1);
+
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
@@ -106,6 +108,17 @@ class _CartScreenState extends State<CartScreen> {
                       onPressed: () {
                         _pizzaBloc.add(
                           PizzaOrderEvent(wrappers: pizzas),
+                        );
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              l10n.orderHasBeenPlaced,
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor: theme.primaryColor,
+                            duration: _snackDur,
+                          ),
                         );
                       },
                     );

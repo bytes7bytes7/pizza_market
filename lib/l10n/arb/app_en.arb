@@ -16,6 +16,7 @@
     "invalid": "Invalid",
     "name":"Name",
     "orderDetails": "Order details",
+    "orderHasBeenPlaced": "Order has been placed",
     "placeOrder": "Place my order",
     "price": "Price",
     "save": "Save",

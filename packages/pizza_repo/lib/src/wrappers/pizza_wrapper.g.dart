@@ -8,7 +8,7 @@ part of 'pizza_wrapper.dart';
 
 _$_PizzaWrapper _$$_PizzaWrapperFromJson(Map<String, dynamic> json) =>
     _$_PizzaWrapper(
-      id: json['id'] as int?,
+      id: json['id'] as int,
       title: json['title'] as String,
       price: (json['price'] as num).toDouble(),
       imageUrl: json['imageUrl'] as String,

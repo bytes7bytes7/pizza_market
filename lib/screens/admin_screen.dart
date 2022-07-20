@@ -6,6 +6,9 @@ import '../blocs/blocs.dart';
 import '../l10n/l10n.dart';
 import '../widgets/widgets.dart';
 
+const _createItemDelay = Duration(milliseconds: 300);
+const _scrollDuration = Duration(milliseconds: 1500);
+
 class AdminScreen extends StatefulWidget {
   const AdminScreen({super.key});
 
@@ -19,6 +22,7 @@ class _AdminScreenState extends State<AdminScreen> {
   late final AdminBloc _adminBloc;
   final _newItems = <PizzaWrapper>[];
   final _needUpdate = <PizzaWrapper>[];
+  var _maxID = 1;
 
   @override
   void initState() {
@@ -51,7 +55,8 @@ class _AdminScreenState extends State<AdminScreen> {
           onPressed: () {
             setState(() {
               _newItems.add(
-                const PizzaWrapper(
+                PizzaWrapper(
+                  id: _maxID++,
                   title: '',
                   price: 0,
                   imageUrl: '',
@@ -59,11 +64,12 @@ class _AdminScreenState extends State<AdminScreen> {
                   maxAmount: 1,
                 ),
               );
-              Future.delayed(const Duration(milliseconds: 300), () {
+
+              Future.delayed(_createItemDelay, () {
                 if (_scrollController.hasClients) {
                   _scrollController.animateTo(
                     _scrollController.position.maxScrollExtent,
-                    duration: const Duration(milliseconds: 1500),
+                    duration: _scrollDuration,
                     curve: Curves.fastOutSlowIn,
                   );
                 }
@@ -92,6 +98,8 @@ class _AdminScreenState extends State<AdminScreen> {
                       ),
                     );
                   }
+
+                  _maxID = wrappers.length + _newItems.length + 1;
 
                   return ListView.builder(
                     physics: const BouncingScrollPhysics(),
@@ -152,6 +160,7 @@ class _AdminScreenState extends State<AdminScreen> {
                               wrappers: List.from(_needUpdate),
                             ),
                           );
+                          _validNotifier.value = <int, bool>{};
                           _needUpdate.clear();
                           _newItems.clear();
                         }

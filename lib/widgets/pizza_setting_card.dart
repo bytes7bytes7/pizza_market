@@ -5,6 +5,7 @@ import '../constants/measures.dart' as const_measures;
 import '../l10n/l10n.dart';
 import 'amount_bar.dart';
 import 'common.dart';
+import 'image_container.dart';
 import 'show_url_dialog.dart';
 
 const pizzaSettingCardExtent = 270.0;
@@ -119,21 +120,9 @@ class _PizzaSettingCardState extends State<PizzaSettingCard> {
               height: const_measures.midImageSize,
               width: const_measures.midImageSize,
               child: IconButton(
-                icon: (_imageUrlController.text.isNotEmpty)
-                    ? Image.network(
-                        _imageUrlController.text,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, trace) {
-                          return Icon(
-                            Icons.photo,
-                            color: theme.primaryColor,
-                          );
-                        },
-                      )
-                    : Icon(
-                        Icons.local_pizza_outlined,
-                        color: theme.primaryColor,
-                      ),
+                icon: ImageContainer(
+                  url: _imageUrlController.text,
+                ),
                 onPressed: () => showUrlDialog(
                   context: context,
                   controller: _imageUrlController,

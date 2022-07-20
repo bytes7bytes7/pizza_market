@@ -2,6 +2,7 @@ export 'amount_bar.dart';
 export 'big_button.dart';
 export 'default_app_bar.dart';
 export 'error_label.dart';
+export 'image_container.dart';
 export 'loading_widget.dart';
 export 'order_card.dart';
 export 'pizza_control_card.dart';

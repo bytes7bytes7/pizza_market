@@ -3,6 +3,7 @@ import 'package:pizza_repo/pizza_repo.dart';
 
 import '../constants/measures.dart' as const_measures;
 import 'common.dart';
+import 'image_container.dart';
 
 class PizzaPreviewCard extends StatelessWidget {
   const PizzaPreviewCard({
@@ -66,21 +67,9 @@ class PizzaPreviewCard extends StatelessWidget {
               SizedBox(
                 height: const_measures.smallImageSize,
                 width: const_measures.smallImageSize,
-                child: (wrapper.imageUrl.isNotEmpty)
-                    ? Image.network(
-                        wrapper.imageUrl,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, trace) {
-                          return Icon(
-                            Icons.photo,
-                            color: theme.primaryColor,
-                          );
-                        },
-                      )
-                    : Icon(
-                        Icons.local_pizza_outlined,
-                        color: theme.primaryColor,
-                      ),
+                child: ImageContainer(
+                  url: wrapper.imageUrl,
+                ),
               ),
               Expanded(
                 child: Padding(

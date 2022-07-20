@@ -4,6 +4,7 @@ import 'package:pizza_repo/pizza_repo.dart';
 import '../constants/measures.dart' as const_measures;
 import 'amount_bar.dart';
 import 'common.dart';
+import 'image_container.dart';
 
 class PizzaControlCard extends StatefulWidget {
   const PizzaControlCard({
@@ -71,21 +72,9 @@ class _PizzaControlCardState extends State<PizzaControlCard> {
             SizedBox(
               height: const_measures.midImageSize,
               width: const_measures.midImageSize,
-              child: (widget.wrapper.imageUrl.isNotEmpty)
-                  ? Image.network(
-                      widget.wrapper.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, trace) {
-                        return Icon(
-                          Icons.photo,
-                          color: theme.primaryColor,
-                        );
-                      },
-                    )
-                  : Icon(
-                      Icons.local_pizza_outlined,
-                      color: theme.primaryColor,
-                    ),
+              child: ImageContainer(
+                url: widget.wrapper.imageUrl,
+              ),
             ),
             Expanded(
               child: Align(

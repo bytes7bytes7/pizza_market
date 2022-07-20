@@ -11,7 +11,7 @@ part 'pizza_wrapper.g.dart';
 @freezed
 class PizzaWrapper with _$PizzaWrapper {
   const factory PizzaWrapper({
-    @JsonKey(name: pizza_const.id) int? id,
+    @JsonKey(name: pizza_const.id) required int id,
     required String title,
     required double price,
     required String imageUrl,
